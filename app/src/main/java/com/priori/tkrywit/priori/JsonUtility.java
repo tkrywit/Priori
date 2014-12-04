@@ -31,19 +31,31 @@ public class JsonUtility {
             }
 
 
-            return
+            return jsonArray.toString();
         }
         catch(JSONException ex) {
             ex.printStackTrace();
         }
-
 
     }
 
     public ArrayList<Task> jsonToTaskList(String jsonIn) {
 
         try {
+            //rebuild primary task list
             JSONArray jsonArray = new JSONArray(jsonIn);
+            ArrayList<Task> = new ArrayList<Task>();
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObj = jsonArray.getJSONObject(i);
+
+                String title = jsonObj.getString("title");
+                String desc = jsonObj.getString("desc");
+                String category = jsonObj.getString("category");
+                Date dateCreated = jsonObj.getJSONObject()
+
+
+            }
 
 
 
