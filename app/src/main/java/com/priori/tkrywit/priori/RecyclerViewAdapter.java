@@ -11,12 +11,12 @@ import java.util.ArrayList;
 /**
  * Created by Thomas on 11/28/2014.
  */
-public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ListItemViewHolder> {
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ListItemViewHolder> {
 
     public final ArrayList<Task> tasks;
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public ListViewAdapter(ArrayList<Task> taskIn) {
+    public RecyclerViewAdapter(ArrayList<Task> taskIn) {
         tasks = taskIn;
     }
 

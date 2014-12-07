@@ -1,50 +1,32 @@
 package com.priori.tkrywit.priori;
 
-import android.app.Activity;
-import android.content.Intent;
+import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.Date;
 
-public class MainActivity extends Activity {
-
-    ArrayList<Task> taskList;
+public class MainActivity extends ActionBarActivity
+        implements MainListFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if (savedInstanceState == null) {
 
-        //initialize task list
-        taskList = new ArrayList<>();
-
-        //test code for task list
-        Task t1 = new Task("Item1", "Desc", "Cat", new Date(), new Date(), 0);
-        Task t2 = new Task("Item2", "Desc", "Cat", new Date(), new Date(), 0);
-        Task t3 = new Task("Item3", "Desc", "Cat", new Date(), new Date(), 0);
-        taskList.add(t1);
-        taskList.add(t2);
-        taskList.add(t3);
-
-        //initialize adapter
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(new ListViewAdapter(taskList));
-
+            getFragmentManager().beginTransaction()
+                    .add(R.id.container, new MainListFragment())
+                    .commit();
+        }
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -54,16 +36,17 @@ public class MainActivity extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
-    public void newTask(View view) {
-
-        Intent intent = new Intent(this, NewTaskActivity.class);
-        startActivity(intent);
+    public void onRecyclerClick(String id) {
+        Toast.makeText(this, "Callback", Toast.LENGTH_LONG);
 
     }
 }
