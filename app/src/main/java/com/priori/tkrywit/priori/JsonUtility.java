@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by Thomas on 12/3/2014.
@@ -13,9 +14,12 @@ public class JsonUtility {
 
     public static String taskListToJson(ArrayList<Task> taskList) {
 
+        JSONArray jsonArray;
+
         try {
             //create JSON object
-            JSONArray jsonArray = new JSONArray();
+            jsonArray = new JSONArray();
+
             for (Task task : taskList) {
                 //handle primary task fields
                 JSONObject jsonItem = new JSONObject();
@@ -30,21 +34,24 @@ public class JsonUtility {
                 //TO DO - SUBTASKS
             }
 
-
             return jsonArray.toString();
         }
         catch(JSONException ex) {
             ex.printStackTrace();
-        }
 
+            return null;
+        }
     }
 
     public ArrayList<Task> jsonToTaskList(String jsonIn) {
 
+        ArrayList<Task> finalArray = new ArrayList<Task>();
+        JSONArray jsonArray;
+
         try {
             //rebuild primary task list
-            JSONArray jsonArray = new JSONArray(jsonIn);
-            ArrayList<Task> = new ArrayList<Task>();
+            jsonArray = new JSONArray(jsonIn);
+            ArrayList<Task> taskList = new ArrayList<Task>();
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObj = jsonArray.getJSONObject(i);
@@ -52,17 +59,20 @@ public class JsonUtility {
                 String title = jsonObj.getString("title");
                 String desc = jsonObj.getString("desc");
                 String category = jsonObj.getString("category");
-                Date dateCreated = jsonObj.getJSONObject()
+                //Date dateCreated = jsonObj.getJSONObject();
+                //Date dateDue = jsonObj.getJSONObject();
+                int priority = jsonObj.getInt("priority");
 
+                Date testDate1 = new Date();
 
+                Task task = new Task(title, desc, category, testDate1, testDate1, priority);
+                taskList.add(task);
             }
-
-
-
+            return finalArray;
         }
         catch(JSONException ex) {
             ex.printStackTrace();
+            return null;
         }
-
     }
 }

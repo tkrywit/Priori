@@ -14,9 +14,8 @@
         android:id="@+id/taskTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/taskIcon"
-        android:layout_toRightOf="@+id/taskIcon"
         android:text="Large Text"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -24,9 +23,9 @@
         android:id="@+id/taskDesc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/taskTitle"
-        android:layout_toEndOf="@+id/taskIcon"
-        android:layout_toRightOf="@+id/taskIcon"
+        android:layout_marginTop="5dp"
         android:text="Small Text"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 </RelativeLayout>

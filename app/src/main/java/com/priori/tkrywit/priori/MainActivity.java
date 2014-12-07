@@ -3,24 +3,41 @@ package com.priori.tkrywit.priori;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-
+import java.util.Date;
 
 public class MainActivity extends Activity {
+
+    ArrayList<Task> taskList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //initialize task list
+        taskList = new ArrayList<>();
+
+        //test code for task list
+        Task t1 = new Task("Item1", "Desc", "Cat", new Date(), new Date(), 0);
+        Task t2 = new Task("Item2", "Desc", "Cat", new Date(), new Date(), 0);
+        Task t3 = new Task("Item3", "Desc", "Cat", new Date(), new Date(), 0);
+        taskList.add(t1);
+        taskList.add(t2);
+        taskList.add(t3);
+
         //initialize adapter
-        ArrayList<Task> tasks = new ArrayList<Task>();
-        ListViewAdapter adapter = new ListViewAdapter(getActivity(), tasks);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(new ListViewAdapter(taskList));
+
     }
 
 

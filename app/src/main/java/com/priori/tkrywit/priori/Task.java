@@ -16,13 +16,19 @@ public class Task {
     int priority;
     //ArrayList<Task> subTasks;
 
-    public Task(String titleIn, String descIn, Date due, int pri) {
+    public Task(String titleIn, String descIn, String cat, Date created, Date due, int pri) {
         title = titleIn;
         desc = descIn;
-        createdDate = new Date();
+        category = cat;
         dueDate = due;
         priority = pri;
+
+        if (created == null) {
+            createdDate = new Date();
+        }
     }
+
+
 
     String getTitle() {
         return title;
