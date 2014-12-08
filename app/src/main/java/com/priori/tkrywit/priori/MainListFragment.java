@@ -2,6 +2,7 @@ package com.priori.tkrywit.priori;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+
+import com.shamanland.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -83,14 +86,7 @@ public class MainListFragment extends Fragment {
 
         //set up onClick listeners
 
-        ImageButton button = (ImageButton) root.findViewById(R.id.newTaskButton);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onNewTaskClick();
-            }
-        });
-
+        FloatingActionButton fab = (FloatingActionButton) root.findViewById(R.id.floatingActionButton);
         return root;
     }
 
