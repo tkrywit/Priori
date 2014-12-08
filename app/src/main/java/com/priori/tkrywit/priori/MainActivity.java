@@ -2,6 +2,7 @@ package com.priori.tkrywit.priori;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -45,8 +46,7 @@ public class MainActivity extends ActionBarActivity
         return super.onOptionsItemSelected(item);
     }
 
-    public void onRecyclerClick(String id) {
-        Toast.makeText(this, "Callback", Toast.LENGTH_LONG);
-
+    public void onNewTaskClick() {
+        Log.d("Gubs", "Back to the activity!");
     }
 }
