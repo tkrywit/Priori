@@ -12,6 +12,9 @@
     <string name="priority_new">0</string>
     <string name="date_button">Set Due Date</string>
     <string name="time_button">Set Due Time</string>
+    <string name="dialog_create">Create</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="new_task_dialog">Create Task</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

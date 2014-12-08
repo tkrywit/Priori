@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 
 public class MainActivity extends ActionBarActivity
-        implements MainListFragment.OnFragmentInteractionListener, TaskCreationFragment.OnFragmentInteractionListener {
+        implements MainListFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
