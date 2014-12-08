@@ -2,21 +2,14 @@ package com.priori.tkrywit.priori;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.Toast;
-
-
 import com.shamanland.fab.FloatingActionButton;
-
+import com.shamanland.fab.ShowHideOnScroll;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -85,8 +78,14 @@ public class MainListFragment extends Fragment {
         recyclerView = (RecyclerView) root.findViewById(R.id.recyclerView);
 
         //set up onClick listeners
-
         FloatingActionButton fab = (FloatingActionButton) root.findViewById(R.id.floatingActionButton);
+        recyclerView.setOnTouchListener(new ShowHideOnScroll(fab, R.anim.floating_action_button_show, R.anim.floating_action_button_hide));
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onNewTaskClick();
+            }
+        });
         return root;
     }
 
