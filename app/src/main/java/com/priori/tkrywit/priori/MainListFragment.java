@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,7 @@ public class MainListFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private RecyclerView recyclerView;
+    private RecyclerViewAdapter adapter;
     private OnFragmentInteractionListener mListener;
 
     /**
@@ -58,8 +60,6 @@ public class MainListFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-        //initialize task list
         taskList = new ArrayList<>();
 
         //test code for task list
@@ -100,7 +100,18 @@ public class MainListFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        recyclerView.setAdapter(new RecyclerViewAdapter(taskList));
+        adapter = new RecyclerViewAdapter(taskList);
+        //initialize task list
+        adapter.SetOnItemClickListener(new RecyclerViewAdapter.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(View v, int position) {
+                String item = String.valueOf(position);
+                Log.d("GUBS", "Pressed " + item);
+            };
+        });
+
+        recyclerView.setAdapter(adapter);
     }
 
 
@@ -131,8 +142,13 @@ public class MainListFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
+    public void onListItemClick(int pos) {
+        mListener.onRecyclerItemClick(pos);
+    }
+
     public interface OnFragmentInteractionListener {
 
         public void onNewTaskClick();
+        public void onRecyclerItemClick(int item);
     }
 }

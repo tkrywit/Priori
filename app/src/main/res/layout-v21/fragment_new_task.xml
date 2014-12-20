@@ -1,0 +1,54 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.priori.tkrywit.priori.NewTaskFragment">
+
+    <EditText
+        android:id="@+id/editTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/editDesc"
+        android:layout_marginTop="20dp"
+        android:hint="@string/new_title" />
+
+    <EditText
+        android:id="@+id/editDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/editTitle"
+        android:layout_marginLeft="10dp"
+        android:ems="10"
+        android:hint="@string/new_desc"
+        android:inputType="textMultiLine"/>
+
+    <TextView
+        android:id="@+id/priorityTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/editDesc"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="30dp"
+        android:text="@string/priority_new"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:id="@+id/dueDateButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/editDesc"
+        android:layout_below="@+id/editDesc"
+        android:layout_marginTop="5dp"
+        android:text="@string/date_button"/>
+
+    <Button
+        android:id="@+id/dueTimeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/dueDateButton"
+        android:layout_below="@+id/dueDateButton"
+        android:layout_marginTop="5dp"
+        android:text="@string/time_button"/>
+
+</RelativeLayout>

@@ -1,18 +1,17 @@
 package com.priori.tkrywit.priori;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 
-public class MainActivity extends ActionBarActivity
-        implements MainListFragment.OnFragmentInteractionListener {
+public class MainActivity extends Activity
+        implements MainListFragment.OnFragmentInteractionListener, NewTaskFragment.OnNewTaskSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,24 +48,32 @@ public class MainActivity extends ActionBarActivity
         return super.onOptionsItemSelected(item);
     }
 
+    //callback methoid for the floating action button
     public void onNewTaskClick() {
 
-        // DialogFragment.show() will take care of adding the fragment
-        // in a transaction.  We also want to remove any currently showing
-        // dialog, so make our own transaction and take care of that here.
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-        if (prev != null) {
-            ft.remove(prev);
-        }
-        ft.addToBackStack(null);
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction ft = fragmentManager.beginTransaction();
 
-        // Create and show the dialog.
-        NewTaskDialogFragment newFragment = NewTaskDialogFragment.newInstance();
-        newFragment.show(ft, "dialog");
+        NewTaskFragment fragment = new NewTaskFragment();
+
+        getFragmentManager().beginTransaction()
+                .replace(R.id.container, new NewTaskFragment(), "newTaskFrag")
+                .commit();
     }
 
-    public void onNewTaskCreated() {
-
+    //handle list clicks by launching the item view fragment
+    public void onRecyclerItemClick(int item) {
+        String s = String.valueOf(item);
+        Log.d("Gubs", "Pressed" + s);
     }
+
+    public void onTaskAccepted() {
+        Log.d("Gubs", "Accept");
+    }
+
+    public void onTaskCanceled() {
+        Log.d("Gubs", "Cancel");
+    }
+
+
 }

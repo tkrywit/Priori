@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RecyclerItemViewHolder> {
 
     public final ArrayList<Task> tasks;
+    OnItemClickListener mItemClickListener;
 
     // Provide a suitable constructor (depends on the kind of dataset)
     public RecyclerViewAdapter(ArrayList<Task> taskIn) {
@@ -29,13 +30,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.task_list_row, parent, false);
 
-        return new RecyclerItemViewHolder(v, new RecyclerItemViewHolder.ViewHolderClick() {
-            public void onItemClick(int position) {
-                String s = String.valueOf(position);
-                Log.d("GUBS", "Pressed!" + s);
-            }
-
-        });
+        return new RecyclerItemViewHolder(v);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
@@ -53,36 +48,37 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return tasks.size();
     }
 
-    public final static class RecyclerItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public void SetOnItemClickListener(final OnItemClickListener mItemClickListener) {
+        this.mItemClickListener = mItemClickListener;
+    }
+
+    public interface OnItemClickListener {
+        public void onItemClick(View view , int position);
+    }
+
+    public class RecyclerItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         //views
         public TextView taskTitleTextView;
         public TextView taskDescTextView;
 
-        //viewholder click
-        public ViewHolderClick vc;
-
         //bind views
-        public RecyclerItemViewHolder(View itemView, ViewHolderClick listener) {
+        public RecyclerItemViewHolder(View itemView) {
             super(itemView);
             taskTitleTextView = (TextView) itemView.findViewById(R.id.taskTitle);
             taskDescTextView = (TextView) itemView.findViewById(R.id.taskDesc);
-
-            //needed?
-            vc = listener;
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            vc.onItemClick(getPosition());
+            if (mItemClickListener != null) {
+                mItemClickListener.onItemClick(v, getPosition());
+            }
         }
-
-        public static interface ViewHolderClick {
-            public void onItemClick(int position);
-        }
-
     }
+
+
 
 
 }
