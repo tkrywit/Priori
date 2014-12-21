@@ -10,7 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.EditText;
 
 
 public class NewTaskFragment extends Fragment {
@@ -42,7 +42,7 @@ public class NewTaskFragment extends Fragment {
 
         switch(item.getItemId()) {
             case R.id.action_accept:
-                mListener.onTaskAccepted();
+                mListener.onTaskAccepted(createTask());
                 return true;
             case R.id.action_cancel:
                 mListener.onTaskCanceled();
@@ -69,9 +69,21 @@ public class NewTaskFragment extends Fragment {
         mListener = null;
     }
 
+    //handle task creation
+    private Task createTask() {
+
+        EditText title = (EditText) getActivity().findViewById(R.id.editTitle);
+        EditText desc = (EditText) getActivity().findViewById(R.id.editDesc);
+        String newTitle = title.getText().toString();
+        String newDesc = desc.getText().toString();
+        Task newTask = new Task(newTitle, newDesc);
+
+        return newTask;
+    }
+
     //listener callback
     public interface OnNewTaskSelectedListener {
-        public void onTaskAccepted();
+        public void onTaskAccepted(Task task);
         public void onTaskCanceled();
     }
 

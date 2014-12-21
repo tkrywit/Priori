@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RecyclerItemViewHolder> {
 
-    public final ArrayList<Task> tasks;
+    private final ArrayList<Task> tasks;
     OnItemClickListener mItemClickListener;
 
     // Provide a suitable constructor (depends on the kind of dataset)

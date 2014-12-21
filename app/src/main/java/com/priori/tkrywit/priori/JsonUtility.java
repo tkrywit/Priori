@@ -1,9 +1,19 @@
 package com.priori.tkrywit.priori;
 
+import android.content.Context;
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -12,7 +22,7 @@ import java.util.Date;
  */
 public class JsonUtility {
 
-    public static String taskListToJson(ArrayList<Task> taskList) {
+    private String taskListToJson(ArrayList<Task> taskList) {
 
         JSONArray jsonArray;
 
@@ -25,10 +35,12 @@ public class JsonUtility {
                 JSONObject jsonItem = new JSONObject();
                 jsonItem.put("title", task.getTitle());
                 jsonItem.put("desc", task.getDesc());
+                /*
                 jsonItem.put("category", task.getCategory());
                 jsonItem.put("dateCreated", task.getCreatedDate());
                 jsonItem.put("dateDue", task.getDueDate());
                 jsonItem.put("priority", task.getPriority());
+                */
 
                 jsonArray.put(jsonItem);
                 //TO DO - SUBTASKS
@@ -43,7 +55,7 @@ public class JsonUtility {
         }
     }
 
-    public ArrayList<Task> jsonToTaskList(String jsonIn) {
+    private ArrayList<Task> jsonToTaskList(String jsonIn) {
 
         ArrayList<Task> finalArray = new ArrayList<Task>();
         JSONArray jsonArray;
@@ -51,22 +63,22 @@ public class JsonUtility {
         try {
             //rebuild primary task list
             jsonArray = new JSONArray(jsonIn);
-            ArrayList<Task> taskList = new ArrayList<Task>();
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObj = jsonArray.getJSONObject(i);
 
                 String title = jsonObj.getString("title");
                 String desc = jsonObj.getString("desc");
-                String category = jsonObj.getString("category");
+                //String category = jsonObj.getString("category");
                 //Date dateCreated = jsonObj.getJSONObject();
                 //Date dateDue = jsonObj.getJSONObject();
-                int priority = jsonObj.getInt("priority");
+                //int priority = jsonObj.getInt("priority");
 
-                Date testDate1 = new Date();
+                //Date testDate1 = new Date();
+                Task task = new Task(title, desc);
 
-                Task task = new Task(title, desc, category, testDate1, testDate1, priority);
-                taskList.add(task);
+                //Task task = new Task(title, desc, category, testDate1, testDate1, priority);
+                finalArray.add(task);
             }
             return finalArray;
         }
@@ -74,5 +86,40 @@ public class JsonUtility {
             ex.printStackTrace();
             return null;
         }
+    }
+
+    public void saveFile(ArrayList<Task> list, String fileName, Context con) {
+
+        String s = taskListToJson(list);
+
+        try {
+            FileOutputStream fileOS = con.openFileOutput(fileName, Context.MODE_PRIVATE);
+            fileOS.write(s.getBytes());
+            fileOS.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public ArrayList<Task> loadFile(String fileName, Context con) {
+        String s = null;
+
+        try {
+            BufferedReader inputReader = new BufferedReader(new InputStreamReader(
+                    con.openFileInput(fileName)));
+            String inputString;
+            StringBuffer stringBuffer = new StringBuffer();
+            while ((inputString = inputReader.readLine()) != null) {
+                stringBuffer.append(inputString + "\n");
+            s = stringBuffer.toString();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        ArrayList<Task> list = jsonToTaskList(s);
+
+        return list;
     }
 }

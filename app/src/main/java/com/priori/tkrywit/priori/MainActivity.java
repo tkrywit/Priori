@@ -18,11 +18,11 @@ public class MainActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
-
             getFragmentManager().beginTransaction()
-                    .add(R.id.container, new MainListFragment())
+                    .add(R.id.container, new MainListFragment(), "mainFrag")
                     .commit();
         }
+
     }
 
 
@@ -48,17 +48,13 @@ public class MainActivity extends Activity
         return super.onOptionsItemSelected(item);
     }
 
-    //callback methoid for the floating action button
+    //callback method for the floating action button
     public void onNewTaskClick() {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, new NewTaskFragment(), "newTaskFrag");
+        transaction.addToBackStack(null);
 
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction ft = fragmentManager.beginTransaction();
-
-        NewTaskFragment fragment = new NewTaskFragment();
-
-        getFragmentManager().beginTransaction()
-                .replace(R.id.container, new NewTaskFragment(), "newTaskFrag")
-                .commit();
+        transaction.commit();
     }
 
     //handle list clicks by launching the item view fragment
@@ -67,12 +63,16 @@ public class MainActivity extends Activity
         Log.d("Gubs", "Pressed" + s);
     }
 
-    public void onTaskAccepted() {
-        Log.d("Gubs", "Accept");
+    public void onTaskAccepted(Task task) {
+        FragmentManager fm = getFragmentManager();
+        fm.popBackStack();
+        MainListFragment mainFrag = (MainListFragment) fm.findFragmentByTag("mainFrag");
+        mainFrag.addNewTask(task);
+
     }
 
     public void onTaskCanceled() {
-        Log.d("Gubs", "Cancel");
+        getFragmentManager().popBackStack();
     }
 
 

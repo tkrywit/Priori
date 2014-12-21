@@ -1,14 +1,14 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:myapp="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
     <!-- Cancel, should appear as action button -->
     <item android:id="@+id/action_cancel"
         android:icon="@drawable/ic_action_cancel"
-        android:title="@string/action_cancel"
-        myapp:showAsAction="ifRoom" />
+        android:showAsAction="ifRoom"
+        android:title="@string/action_cancel" />
     <!-- Done, should appear as action button -->
     <item android:id="@+id/action_accept"
         android:icon="@drawable/ic_action_accept"
-        android:title="@string/action_accept"
-        myapp:showAsAction="always" />
+        android:showAsAction="ifRoom"
+        android:title="@string/action_accept"/>
 
 </menu>

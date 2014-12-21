@@ -25,7 +25,7 @@
         android:layout_alignParentEnd="true"
         android:src="@drawable/ic_add_white_48dp"
         app:floatingActionButtonColor="@color/material_red_A400"
-        app:floatingActionButtonSize="normal" />
+        app:floatingActionButtonSize="mini" />
 
 
 </RelativeLayout>

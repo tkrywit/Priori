@@ -7,6 +7,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import com.shamanland.fab.FloatingActionButton;
@@ -28,12 +30,14 @@ public class MainListFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     ArrayList<Task> taskList;
+    JsonUtility jUtil;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     private RecyclerView recyclerView;
     private RecyclerViewAdapter adapter;
     private OnFragmentInteractionListener mListener;
+
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -60,15 +64,16 @@ public class MainListFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        taskList = new ArrayList<>();
 
-        //test code for task list
-        Task t1 = new Task("Item1", "Desc", "Cat", new Date(), new Date(), 0);
-        Task t2 = new Task("Item2", "Desc", "Cat", new Date(), new Date(), 0);
-        Task t3 = new Task("Item3", "Desc", "Cat", new Date(), new Date(), 0);
-        taskList.add(t1);
-        taskList.add(t2);
-        taskList.add(t3);
+        //need to save and load data
+        jUtil = new JsonUtility();
+        taskList = jUtil.loadFile("saveData", getActivity().getApplicationContext());
+        if (taskList == null) {
+            Log.d("Gubs", "Null");
+            taskList = new ArrayList<>();
+        }
+
+
 
     }
 
@@ -114,7 +119,6 @@ public class MainListFragment extends Fragment {
         recyclerView.setAdapter(adapter);
     }
 
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -144,6 +148,14 @@ public class MainListFragment extends Fragment {
      */
     public void onListItemClick(int pos) {
         mListener.onRecyclerItemClick(pos);
+    }
+
+    //add new task to adapter
+    public void addNewTask(Task newTask) {
+        taskList.add(newTask);
+        adapter.notifyDataSetChanged();
+        //save data
+        jUtil.saveFile(taskList, "saveData", getActivity().getApplicationContext());
     }
 
     public interface OnFragmentInteractionListener {

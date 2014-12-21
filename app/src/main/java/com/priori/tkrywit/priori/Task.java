@@ -24,8 +24,13 @@ public class Task {
         priority = pri;
 
         if (created == null) {
-            createdDate = new Date();
+            //createdDate = new Date();
         }
+    }
+
+    public Task(String titleIn, String descIn) {
+        title = titleIn;
+        desc = descIn;
     }
 
 
