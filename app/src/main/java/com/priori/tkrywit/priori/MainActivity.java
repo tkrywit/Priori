@@ -1,6 +1,7 @@
 package com.priori.tkrywit.priori;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -9,9 +10,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.Calendar;
+
 
 public class MainActivity extends Activity
-        implements MainListFragment.OnFragmentInteractionListener, NewTaskFragment.OnNewTaskSelectedListener {
+        implements MainListFragment.OnFragmentInteractionListener, NewTaskFragment.OnNewTaskSelectedListener,
+                    DatePickerFragment.datePickedCallback, TimePickerFragment.timePickedCallback {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,5 +79,21 @@ public class MainActivity extends Activity
         getFragmentManager().popBackStack();
     }
 
+    public void showDatePicker() {
+        DialogFragment dateFragment = new DatePickerFragment();
+        dateFragment.show(getFragmentManager(), "datePicker");
+    }
 
+    public void showTimePicker() {
+        DialogFragment timeFragment = new TimePickerFragment();
+        timeFragment.show(getFragmentManager(), "timePicker");
+    }
+
+    public void setDate(Calendar cal) {
+        Log.d("Gubs", cal.toString());
+    }
+
+    public void setTime(Calendar cal) {
+        Log.d("Gubs", cal.toString());
+    }
 }

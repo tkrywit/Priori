@@ -68,12 +68,11 @@ public class NewTaskFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.dueDateButton:
-                DialogFragment timeFragment = new TimePickerFragment();
-                timeFragment.show(getFragmentManager(), "timePicker");
+                mListener.showDatePicker();
+
                 break;
             case R.id.dueTimeButton:
-                DialogFragment dateFragment = new DatePickerFragment();
-                dateFragment.show(getFragmentManager(), "datePicker");
+                mListener.showTimePicker();
                 break;
         }
     }
@@ -111,6 +110,10 @@ public class NewTaskFragment extends Fragment implements View.OnClickListener {
     public interface OnNewTaskSelectedListener {
         public void onTaskAccepted(Task task);
         public void onTaskCanceled();
+
+        //to launch date and time pickers
+        public void showDatePicker();
+        public void showTimePicker();
     }
 
 }

@@ -1,5 +1,6 @@
 package com.priori.tkrywit.priori;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -12,6 +13,8 @@ import java.util.Calendar;
  */
 public class DatePickerFragment extends DialogFragment
         implements DatePickerDialog.OnDateSetListener {
+
+    datePickedCallback mCallback;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -26,6 +29,25 @@ public class DatePickerFragment extends DialogFragment
     }
 
     public void onDateSet(DatePicker view, int year, int month, int day) {
-        // Do something with the date chosen by the user
+        Calendar cal = Calendar.getInstance();
+        cal.set(year, month, day);
+        mCallback.setDate(cal);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        try {
+            mCallback = (datePickedCallback) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement textEntered");
+        }
+    }
+
+    //activity callback interface
+    public interface datePickedCallback {
+        public void setDate(Calendar cal);
     }
 }
