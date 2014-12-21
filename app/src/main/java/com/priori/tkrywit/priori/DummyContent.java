@@ -1,4 +1,4 @@
-package com.priori.tkrywit.priori.dummy;
+package com.priori.tkrywit.priori;
 
 import java.util.ArrayList;
 import java.util.HashMap;

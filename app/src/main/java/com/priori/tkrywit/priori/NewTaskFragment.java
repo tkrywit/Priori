@@ -2,18 +2,21 @@ package com.priori.tkrywit.priori;
 
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 
 
-public class NewTaskFragment extends Fragment {
+public class NewTaskFragment extends Fragment implements View.OnClickListener {
 
     private OnNewTaskSelectedListener mListener;
 
@@ -27,8 +30,16 @@ public class NewTaskFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_new_task, container, false);
+        View view = inflater.inflate(R.layout.fragment_new_task, container, false);
+
+        Button dateButton = (Button) view.findViewById(R.id.dueDateButton);
+        Button timeButton = (Button) view.findViewById(R.id.dueTimeButton);
+        dateButton.setOnClickListener(this);
+        timeButton.setOnClickListener(this);
+
+        return view;
     }
 
     @Override
@@ -49,6 +60,21 @@ public class NewTaskFragment extends Fragment {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    //handle button presses
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.dueDateButton:
+                DialogFragment timeFragment = new TimePickerFragment();
+                timeFragment.show(getFragmentManager(), "timePicker");
+                break;
+            case R.id.dueTimeButton:
+                DialogFragment dateFragment = new DatePickerFragment();
+                dateFragment.show(getFragmentManager(), "datePicker");
+                break;
         }
     }
 
