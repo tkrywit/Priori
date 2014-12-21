@@ -14,11 +14,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+
+import java.util.Calendar;
 
 
 public class NewTaskFragment extends Fragment implements View.OnClickListener {
 
     private OnNewTaskSelectedListener mListener;
+    private TextView dateTextView;
+    private TextView timeTextView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,10 +39,17 @@ public class NewTaskFragment extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_new_task, container, false);
 
+        //set up button listeners
         Button dateButton = (Button) view.findViewById(R.id.dueDateButton);
         Button timeButton = (Button) view.findViewById(R.id.dueTimeButton);
         dateButton.setOnClickListener(this);
         timeButton.setOnClickListener(this);
+
+        //set up textviews
+        dateTextView = (TextView) view.findViewById(R.id.dateTextView);
+        timeTextView = (TextView) view.findViewById(R.id.timeTextView);
+        dateTextView.setText(CalendarHelper.getCurrentDateString());
+        timeTextView.setText(CalendarHelper.getCurrentTimeString());
 
         return view;
     }

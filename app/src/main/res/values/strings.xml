@@ -10,13 +10,14 @@
     <string name="new_due_date">Due:</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="priority_new">0</string>
-    <string name="date_button">Set Due Date</string>
-    <string name="time_button">Set Due Time</string>
+    <string name="date_button">Due Date</string>
+    <string name="time_button">Due Time</string>
     <string name="dialog_create">Create</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="new_task_dialog">Create Task</string>
-
     <string name="action_accept">Accept</string>
     <string name="action_cancel">Cancel</string>
+    <string name="sample_date">Date</string>
+    <string name="sample_time">Time</string>
 
 </resources>

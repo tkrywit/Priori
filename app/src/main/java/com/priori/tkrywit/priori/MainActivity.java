@@ -64,7 +64,7 @@ public class MainActivity extends Activity
     //handle list clicks by launching the item view fragment
     public void onRecyclerItemClick(int item) {
         String s = String.valueOf(item);
-        Log.d("Gubs", "Pressed" + s);
+        Log.d("Gubs", "Pressedddd" + s);
     }
 
     public void onTaskAccepted(Task task) {

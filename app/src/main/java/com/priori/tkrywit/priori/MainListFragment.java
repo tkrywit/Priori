@@ -111,8 +111,7 @@ public class MainListFragment extends Fragment {
 
             @Override
             public void onItemClick(View v, int position) {
-                String item = String.valueOf(position);
-                Log.d("GUBS", "Pressed " + item);
+                mListener.onRecyclerItemClick(position);
             };
         });
 
@@ -136,19 +135,6 @@ public class MainListFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public void onListItemClick(int pos) {
-        mListener.onRecyclerItemClick(pos);
-    }
 
     //add new task to adapter
     public void addNewTask(Task newTask) {
@@ -157,6 +143,7 @@ public class MainListFragment extends Fragment {
         //save data
         jUtil.saveFile(taskList, "saveData", getActivity().getApplicationContext());
     }
+
 
     public interface OnFragmentInteractionListener {
 
