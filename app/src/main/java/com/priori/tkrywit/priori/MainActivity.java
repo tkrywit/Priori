@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
@@ -68,10 +69,15 @@ public class MainActivity extends Activity
     }
 
     public void onTaskAccepted(Task task) {
-        FragmentManager fm = getFragmentManager();
-        fm.popBackStack();
-        MainListFragment mainFrag = (MainListFragment) fm.findFragmentByTag("mainFrag");
-        mainFrag.addNewTask(task);
+        if (task == null) {
+            Toast toast = Toast.makeText(getApplicationContext(), R.string.new_task_requires, Toast.LENGTH_LONG);
+            toast.show();
+        } else {
+            FragmentManager fm = getFragmentManager();
+            fm.popBackStack();
+            MainListFragment mainFrag = (MainListFragment) fm.findFragmentByTag("mainFrag");
+            mainFrag.addNewTask(task);
+        }
 
     }
 
@@ -90,10 +96,15 @@ public class MainActivity extends Activity
     }
 
     public void setDate(Calendar cal) {
-        Log.d("Gubs", cal.toString());
+        FragmentManager fm = getFragmentManager();
+        NewTaskFragment newTaskFragment = (NewTaskFragment) fm.findFragmentByTag("newTaskFrag");
+        newTaskFragment.passDate(cal);
+
     }
 
     public void setTime(Calendar cal) {
-        Log.d("Gubs", cal.toString());
+        FragmentManager fm = getFragmentManager();
+        NewTaskFragment newTaskFragment = (NewTaskFragment) fm.findFragmentByTag("newTaskFrag");
+        newTaskFragment.passTime(cal);
     }
 }

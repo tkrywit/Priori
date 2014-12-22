@@ -1,5 +1,7 @@
 package com.priori.tkrywit.priori;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -11,10 +13,11 @@ public class Task {
     String title;
     String desc;
     String category;
+    int priority;
 
     Calendar dueDate;
     Calendar createdDate;
-    int priority;
+
     //ArrayList<Task> subTasks;
 
     public Task(String titleIn, String descIn, String cat, Calendar created, Calendar due, int pri) {
@@ -26,12 +29,44 @@ public class Task {
 
         if (created == null) {
             createdDate = Calendar.getInstance();
+            Log.d("Gubs", "Created new date!");
         }
     }
 
     public Task(String titleIn, String descIn) {
         title = titleIn;
         desc = descIn;
+        priority = 0;
+        category = "Uncategorized";
+        dueDate = null;
+        createdDate = Calendar.getInstance();
+    }
+
+    public Task(String titleIn, String descIn, int pri) {
+        title = titleIn;
+        desc = descIn;
+        priority = pri;
+        category = "Uncategorized";
+        dueDate = null;
+        createdDate = Calendar.getInstance();
+    }
+
+    public Task(String titleIn, String descIn, String cat) {
+        title = titleIn;
+        desc = descIn;
+        priority = 0;
+        category = cat;
+        dueDate = null;
+        createdDate = Calendar.getInstance();
+    }
+
+    public Task(String titleIn, String descIn, String cat, int pri) {
+        title = titleIn;
+        desc = descIn;
+        priority = pri;
+        category = cat;
+        dueDate = null;
+        createdDate = Calendar.getInstance();
     }
 
 

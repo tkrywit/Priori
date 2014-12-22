@@ -23,9 +23,16 @@ public final class CalendarHelper {
 
     public static String getCurrentTimeString() {
         Calendar cal = Calendar.getInstance();
-        String s = String.valueOf(cal.get(Calendar.HOUR)) + ":"
-                + String.valueOf(cal.get(Calendar.MINUTE)) + " " +
-                cal.getDisplayName(Calendar.AM_PM, Calendar.LONG, Locale.ENGLISH);
+        String s;
+        if (String.valueOf(cal.get(Calendar.MINUTE)).length() == 1) {
+            s = String.valueOf(cal.get(Calendar.HOUR)) + ":0"
+                    + String.valueOf(cal.get(Calendar.MINUTE)) + " " +
+                    cal.getDisplayName(Calendar.AM_PM, Calendar.LONG, Locale.ENGLISH);
+        } else {
+            s = String.valueOf(cal.get(Calendar.HOUR)) + ":"
+                    + String.valueOf(cal.get(Calendar.MINUTE)) + " " +
+                    cal.getDisplayName(Calendar.AM_PM, Calendar.LONG, Locale.ENGLISH);
+        }
         return s;
     }
 }

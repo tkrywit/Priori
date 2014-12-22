@@ -25,15 +25,9 @@ import java.util.Date;
  */
 public class MainListFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    ArrayList<Task> taskList;
+    TaskList taskList;
     JsonUtility jUtil;
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+
     private RecyclerView recyclerView;
     private RecyclerViewAdapter adapter;
     private OnFragmentInteractionListener mListener;
@@ -46,31 +40,16 @@ public class MainListFragment extends Fragment {
     public MainListFragment() {
     }
 
-    // TODO: Rename and change types of parameters
-    public static MainListFragment newInstance(String param1, String param2) {
-        MainListFragment fragment = new MainListFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-
         //need to save and load data
-        jUtil = new JsonUtility();
-        taskList = jUtil.loadFile("saveData", getActivity().getApplicationContext());
+        jUtil = new JsonUtility(getActivity().getApplicationContext());
+        taskList = jUtil.loadFile("saveData");
         if (taskList == null) {
-            Log.d("Gubs", "Null");
-            taskList = new ArrayList<>();
+            taskList = new TaskList(getActivity().getApplicationContext());
         }
 
 
@@ -105,7 +84,7 @@ public class MainListFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        adapter = new RecyclerViewAdapter(taskList);
+        adapter = new RecyclerViewAdapter(taskList.getTaskList());
         //initialize task list
         adapter.SetOnItemClickListener(new RecyclerViewAdapter.OnItemClickListener() {
 
@@ -138,10 +117,10 @@ public class MainListFragment extends Fragment {
 
     //add new task to adapter
     public void addNewTask(Task newTask) {
-        taskList.add(newTask);
+        taskList.getTaskList().add(newTask);
         adapter.notifyDataSetChanged();
         //save data
-        jUtil.saveFile(taskList, "saveData", getActivity().getApplicationContext());
+        jUtil.saveFile(taskList, "saveData");
     }
 
 

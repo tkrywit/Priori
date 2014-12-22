@@ -23,7 +23,13 @@ import java.util.Date;
  */
 public class JsonUtility {
 
-    private String taskListToJson(ArrayList<Task> taskList) {
+    Context context;
+
+    public JsonUtility(Context con) {
+        context = con;
+    }
+
+    private String taskListToJson(TaskList taskList) {
 
         JSONArray jsonArray;
 
@@ -31,7 +37,18 @@ public class JsonUtility {
             //create JSON object
             jsonArray = new JSONArray();
 
-            for (Task task : taskList) {
+            //serialize categories
+            JSONObject jsonObject = new JSONObject();
+            ArrayList<String> cats = taskList.getCategoryList();
+            for (int i = 0; i < cats.size(); i++) {
+                //create json handle
+                String handle = "Cat" + String.valueOf(i);
+                jsonObject.put(handle, cats.get(i));
+            }
+            jsonArray.put(jsonObject);
+
+            //serialize tasks
+            for (Task task : taskList.getTaskList()) {
                 //handle primary task fields
                 JSONObject jsonItem = new JSONObject();
                 jsonItem.put("title", task.getTitle());
@@ -40,8 +57,12 @@ public class JsonUtility {
                 jsonItem.put("priority", task.getPriority());
 
                 //serialize dates
-                jsonItem.put("dateCreated", task.getCreatedDate().getTimeInMillis());
-                jsonItem.put("dateDue", task.getDueDate().getTimeInMillis());
+                if (task.getCreatedDate() != null) {
+                    jsonItem.put("dateCreated", task.getCreatedDate().getTimeInMillis());
+                }
+                if (task.getDueDate() != null) {
+                    jsonItem.put("dateDue", task.getDueDate().getTimeInMillis());
+                }
 
                 jsonArray.put(jsonItem);
 
@@ -57,17 +78,25 @@ public class JsonUtility {
         }
     }
 
-    private ArrayList<Task> jsonToTaskList(String jsonIn) {
+    private TaskList jsonToTaskList(String jsonIn) {
 
-        ArrayList<Task> finalArray = new ArrayList<Task>();
+        ArrayList<String> catList = new ArrayList<>();
+        ArrayList<Task> taskArray = new ArrayList<>();
+        TaskList taskList = new TaskList(context);
         JSONArray jsonArray;
 
         try {
-            //rebuild primary task list
+            //rebuild category list
             jsonArray = new JSONArray(jsonIn);
+            JSONObject jsonObj = jsonArray.getJSONObject(0);
+            for (int i = 0; i < jsonObj.length(); i++) {
+                String handle = "Cat" + String.valueOf(i);
+                catList.add(jsonObj.getString(handle));
+            }
 
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObj = jsonArray.getJSONObject(i);
+            //rebuild primary task list
+            for (int i = 1; i < jsonArray.length(); i++) {
+                jsonObj = jsonArray.getJSONObject(i);
 
                 String title = jsonObj.getString("title");
                 String desc = jsonObj.getString("desc");
@@ -76,26 +105,34 @@ public class JsonUtility {
 
                 Calendar dateCreated = Calendar.getInstance();
                 Calendar dateDue = Calendar.getInstance();
-                dateCreated.setTimeInMillis(jsonObj.getLong("dateCreated"));
-                dateDue.setTimeInMillis(jsonObj.getLong("dateDue"));
+                if (jsonObj.has("dateCreated")) {
+                    dateCreated.setTimeInMillis(jsonObj.getLong("dateCreated"));
+                }
+                if (jsonObj.has("dateDue")) {
+                    dateDue.setTimeInMillis(jsonObj.getLong("dateDue"));
+                }
 
                 Task task = new Task(title, desc, category, dateCreated, dateDue, priority);
-                finalArray.add(task);
+                taskArray.add(task);
             }
-            return finalArray;
+
+            taskList.setCategoryList(catList);
+            taskList.setTaskList(taskArray);
+            return taskList;
         }
         catch(JSONException ex) {
+            Log.d("Gubs", "Excepted!");
             ex.printStackTrace();
             return null;
         }
     }
 
-    public void saveFile(ArrayList<Task> list, String fileName, Context con) {
+    public void saveFile(TaskList list, String fileName) {
 
         String s = taskListToJson(list);
 
         try {
-            FileOutputStream fileOS = con.openFileOutput(fileName, Context.MODE_PRIVATE);
+            FileOutputStream fileOS = context.openFileOutput(fileName, Context.MODE_PRIVATE);
             fileOS.write(s.getBytes());
             fileOS.close();
         } catch (Exception e) {
@@ -103,12 +140,12 @@ public class JsonUtility {
         }
     }
 
-    public ArrayList<Task> loadFile(String fileName, Context con) {
+    public TaskList loadFile(String fileName) {
         String s = null;
 
         try {
             BufferedReader inputReader = new BufferedReader(new InputStreamReader(
-                    con.openFileInput(fileName)));
+                    context.openFileInput(fileName)));
             String inputString;
             StringBuffer stringBuffer = new StringBuffer();
             while ((inputString = inputReader.readLine()) != null) {
@@ -120,8 +157,6 @@ public class JsonUtility {
             return null;
         }
 
-        ArrayList<Task> list = jsonToTaskList(s);
-
-        return list;
+         return jsonToTaskList(s);
     }
 }

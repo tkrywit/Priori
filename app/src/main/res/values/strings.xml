@@ -19,5 +19,7 @@
     <string name="action_cancel">Cancel</string>
     <string name="sample_date">Date</string>
     <string name="sample_time">Time</string>
+    <string name="new_task_requires">Tasks require a title and description</string>
+    <string name="uncategorized">Uncategorized</string>
 
 </resources>

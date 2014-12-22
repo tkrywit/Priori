@@ -24,11 +24,14 @@ public class NewTaskFragment extends Fragment implements View.OnClickListener {
     private OnNewTaskSelectedListener mListener;
     private TextView dateTextView;
     private TextView timeTextView;
+    private Calendar dueDate;
+    private Calendar dueTime;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        dueDate = null;
+        dueTime = null;
         setHasOptionsMenu(true);
     }
 
@@ -106,16 +109,35 @@ public class NewTaskFragment extends Fragment implements View.OnClickListener {
         mListener = null;
     }
 
-    //handle task creation
+    //create a task object from the fields shown in the fragment
+    //ensure required fields are filled
+    //called when user clicks accept action bar button
+    //if all fields not filled, return null
     private Task createTask() {
 
         EditText title = (EditText) getActivity().findViewById(R.id.editTitle);
         EditText desc = (EditText) getActivity().findViewById(R.id.editDesc);
         String newTitle = title.getText().toString();
         String newDesc = desc.getText().toString();
+
+        if (newTitle.length() == 0 || newDesc.length() == 0) {
+            return null;
+        }
+        //must handle category spinner first!
+
         Task newTask = new Task(newTitle, newDesc);
 
         return newTask;
+    }
+
+    //pass the calendar object from date picker back to the fragment
+    public void passDate(Calendar cal) {
+        dueDate = cal;
+    }
+
+    //pass the calendar object from time picker back to the fragment
+    public void passTime(Calendar cal) {
+        dueTime = cal;
     }
 
     //listener callback
