@@ -15,6 +15,7 @@ import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -35,14 +36,15 @@ public class JsonUtility {
                 JSONObject jsonItem = new JSONObject();
                 jsonItem.put("title", task.getTitle());
                 jsonItem.put("desc", task.getDesc());
-                /*
                 jsonItem.put("category", task.getCategory());
-                jsonItem.put("dateCreated", task.getCreatedDate());
-                jsonItem.put("dateDue", task.getDueDate());
                 jsonItem.put("priority", task.getPriority());
-                */
+
+                //serialize dates
+                jsonItem.put("dateCreated", task.getCreatedDate().getTimeInMillis());
+                jsonItem.put("dateDue", task.getDueDate().getTimeInMillis());
 
                 jsonArray.put(jsonItem);
+
                 //TO DO - SUBTASKS
             }
 
@@ -69,15 +71,15 @@ public class JsonUtility {
 
                 String title = jsonObj.getString("title");
                 String desc = jsonObj.getString("desc");
-                //String category = jsonObj.getString("category");
-                //Date dateCreated = jsonObj.getJSONObject();
-                //Date dateDue = jsonObj.getJSONObject();
-                //int priority = jsonObj.getInt("priority");
+                String category = jsonObj.getString("category");
+                int priority = jsonObj.getInt("priority");
 
-                //Date testDate1 = new Date();
-                Task task = new Task(title, desc);
+                Calendar dateCreated = Calendar.getInstance();
+                Calendar dateDue = Calendar.getInstance();
+                dateCreated.setTimeInMillis(jsonObj.getLong("dateCreated"));
+                dateDue.setTimeInMillis(jsonObj.getLong("dateDue"));
 
-                //Task task = new Task(title, desc, category, testDate1, testDate1, priority);
+                Task task = new Task(title, desc, category, dateCreated, dateDue, priority);
                 finalArray.add(task);
             }
             return finalArray;

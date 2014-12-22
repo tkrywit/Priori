@@ -1,6 +1,7 @@
 package com.priori.tkrywit.priori;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -11,12 +12,12 @@ public class Task {
     String desc;
     String category;
 
-    Date dueDate;
-    Date createdDate;
+    Calendar dueDate;
+    Calendar createdDate;
     int priority;
     //ArrayList<Task> subTasks;
 
-    public Task(String titleIn, String descIn, String cat, Date created, Date due, int pri) {
+    public Task(String titleIn, String descIn, String cat, Calendar created, Calendar due, int pri) {
         title = titleIn;
         desc = descIn;
         category = cat;
@@ -24,7 +25,7 @@ public class Task {
         priority = pri;
 
         if (created == null) {
-            //createdDate = new Date();
+            createdDate = Calendar.getInstance();
         }
     }
 
@@ -47,9 +48,9 @@ public class Task {
         return category;
     }
 
-    Date getCreatedDate() { return createdDate; }
+    Calendar getCreatedDate() { return createdDate; }
 
-    Date getDueDate() { return dueDate; }
+    Calendar getDueDate() { return dueDate; }
 
     int getPriority() { return priority; }
 
