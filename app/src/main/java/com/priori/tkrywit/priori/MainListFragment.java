@@ -46,10 +46,10 @@ public class MainListFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         //need to save and load data
-        jUtil = new JsonUtility(getActivity().getApplicationContext());
+        jUtil = new JsonUtility(getActivity());
         taskList = jUtil.loadFile("saveData");
         if (taskList == null) {
-            taskList = new TaskList(getActivity().getApplicationContext());
+            taskList = new TaskList(getActivity());
         }
 
 
@@ -91,7 +91,15 @@ public class MainListFragment extends Fragment {
             @Override
             public void onItemClick(View v, int position) {
                 mListener.onRecyclerItemClick(position);
-            };
+            }
+        });
+
+        adapter.SetOnItemLongClickListener(new RecyclerViewAdapter.OnItemLongClickListener() {
+
+            @Override
+            public void onItemLongClick(View v, int position) {
+                mListener.onRecyclerItemLongClick(position);
+            }
         });
 
         recyclerView.setAdapter(adapter);
@@ -123,10 +131,16 @@ public class MainListFragment extends Fragment {
         jUtil.saveFile(taskList, "saveData");
     }
 
+    //get the category list for passing to other fragments
+    public ArrayList<String> getCategoryList() {
+        return taskList.getCategoryList();
+    }
+
 
     public interface OnFragmentInteractionListener {
 
         public void onNewTaskClick();
         public void onRecyclerItemClick(int item);
+        public void onRecyclerItemLongClick(int item);
     }
 }

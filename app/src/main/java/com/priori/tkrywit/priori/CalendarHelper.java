@@ -11,18 +11,15 @@ import java.util.Locale;
  */
 public final class CalendarHelper {
 
-    public static String getCurrentDateString() {
-        Calendar cal = Calendar.getInstance();
+    public static String getDateString(Calendar cal) {
         String s = cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.ENGLISH) + ", "
                 + cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH) + " "
                 + cal.get(Calendar.DAY_OF_MONTH) + ", "
                 + cal.get(Calendar.YEAR);
         return s;
-
     }
 
-    public static String getCurrentTimeString() {
-        Calendar cal = Calendar.getInstance();
+    public static String getTimeString(Calendar cal) {
         String s;
         if (String.valueOf(cal.get(Calendar.MINUTE)).length() == 1) {
             s = String.valueOf(cal.get(Calendar.HOUR)) + ":0"

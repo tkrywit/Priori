@@ -11,12 +11,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 
 public class MainActivity extends Activity
         implements MainListFragment.OnFragmentInteractionListener, NewTaskFragment.OnNewTaskSelectedListener,
-                    DatePickerFragment.datePickedCallback, TimePickerFragment.timePickedCallback {
+                    DatePickerFragment.datePickedCallback, TimePickerFragment.timePickedCallback,
+                    PriorityFragment.OnPriorityInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,43 +70,55 @@ public class MainActivity extends Activity
         Log.d("Gubs", "Pressedddd" + s);
     }
 
+    public void onRecyclerItemLongClick(int item) {
+        Log.d("Gubs", "long click");
+    }
+
     public void onTaskAccepted(Task task) {
-        if (task == null) {
-            Toast toast = Toast.makeText(getApplicationContext(), R.string.new_task_requires, Toast.LENGTH_LONG);
-            toast.show();
-        } else {
+        if (task != null) {
             FragmentManager fm = getFragmentManager();
             fm.popBackStack();
             MainListFragment mainFrag = (MainListFragment) fm.findFragmentByTag("mainFrag");
             mainFrag.addNewTask(task);
         }
-
+        getWindow().setStatusBarColor(getResources().getColor(R.color.material_grey_700));
     }
 
     public void onTaskCanceled() {
+        getWindow().setStatusBarColor(getResources().getColor(R.color.material_grey_700));
         getFragmentManager().popBackStack();
     }
 
-    public void showDatePicker() {
-        DialogFragment dateFragment = new DatePickerFragment();
-        dateFragment.show(getFragmentManager(), "datePicker");
-    }
-
-    public void showTimePicker() {
-        DialogFragment timeFragment = new TimePickerFragment();
-        timeFragment.show(getFragmentManager(), "timePicker");
-    }
-
     public void setDate(Calendar cal) {
-        FragmentManager fm = getFragmentManager();
-        NewTaskFragment newTaskFragment = (NewTaskFragment) fm.findFragmentByTag("newTaskFrag");
-        newTaskFragment.passDate(cal);
 
+        //ensure date is not in past
+        if (cal.before(Calendar.getInstance())) {
+            Toast toast = Toast.makeText(getApplicationContext(), R.string.date_in_past, Toast.LENGTH_LONG);
+            toast.show();
+        } else {
+            FragmentManager fm = getFragmentManager();
+            NewTaskFragment newTaskFragment = (NewTaskFragment) fm.findFragmentByTag("newTaskFrag");
+            newTaskFragment.passDate(cal);
+        }
     }
 
     public void setTime(Calendar cal) {
         FragmentManager fm = getFragmentManager();
         NewTaskFragment newTaskFragment = (NewTaskFragment) fm.findFragmentByTag("newTaskFrag");
         newTaskFragment.passTime(cal);
+    }
+
+    public void updateCategoryList() {
+        FragmentManager fm = getFragmentManager();
+        MainListFragment mainTaskFragment = (MainListFragment) fm.findFragmentByTag("mainFrag");
+        ArrayList<String> cats = mainTaskFragment.getCategoryList();
+        NewTaskFragment newTaskFragment = (NewTaskFragment) fm.findFragmentByTag("newTaskFrag");
+        newTaskFragment.setCategoryList(cats);
+    }
+
+    public void onPrioritySelected(int which) {
+        FragmentManager fm = getFragmentManager();
+        NewTaskFragment newTaskFragment = (NewTaskFragment) fm.findFragmentByTag("newTaskFrag");
+        newTaskFragment.passPriority(which);
     }
 }

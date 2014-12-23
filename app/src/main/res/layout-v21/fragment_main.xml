@@ -23,8 +23,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="5dp"
         android:src="@drawable/ic_add_white_48dp"
-        app:floatingActionButtonColor="@color/material_red_A400"
+        app:floatingActionButtonColor="@color/material_red_500"
         app:floatingActionButtonSize="mini" />
 
 

@@ -1,5 +1,6 @@
 package com.priori.tkrywit.priori;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -8,25 +9,20 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by Thomas on 12/3/2014.
  */
 public class JsonUtility {
 
-    Context context;
+    Activity act;
 
-    public JsonUtility(Context con) {
-        context = con;
+    public JsonUtility(Activity con) {
+        act = con;
     }
 
     private String taskListToJson(TaskList taskList) {
@@ -82,7 +78,7 @@ public class JsonUtility {
 
         ArrayList<String> catList = new ArrayList<>();
         ArrayList<Task> taskArray = new ArrayList<>();
-        TaskList taskList = new TaskList(context);
+        TaskList taskList = new TaskList(act);
         JSONArray jsonArray;
 
         try {
@@ -132,7 +128,7 @@ public class JsonUtility {
         String s = taskListToJson(list);
 
         try {
-            FileOutputStream fileOS = context.openFileOutput(fileName, Context.MODE_PRIVATE);
+            FileOutputStream fileOS = act.openFileOutput(fileName, Context.MODE_PRIVATE);
             fileOS.write(s.getBytes());
             fileOS.close();
         } catch (Exception e) {
@@ -145,7 +141,7 @@ public class JsonUtility {
 
         try {
             BufferedReader inputReader = new BufferedReader(new InputStreamReader(
-                    context.openFileInput(fileName)));
+                    act.openFileInput(fileName)));
             String inputString;
             StringBuffer stringBuffer = new StringBuffer();
             while ((inputString = inputReader.readLine()) != null) {

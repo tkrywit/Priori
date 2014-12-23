@@ -9,7 +9,7 @@
     <string name="new_desc">Task Description</string>
     <string name="new_due_date">Due:</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="priority_new">0</string>
+    <string name="priority_new">Priority</string>
     <string name="date_button">Due Date</string>
     <string name="time_button">Due Time</string>
     <string name="dialog_create">Create</string>
@@ -17,9 +17,14 @@
     <string name="new_task_dialog">Create Task</string>
     <string name="action_accept">Accept</string>
     <string name="action_cancel">Cancel</string>
-    <string name="sample_date">Date</string>
-    <string name="sample_time">Time</string>
+    <string name="sample_date">No Due Date</string>
+    <string name="sample_time">No Due Time</string>
     <string name="new_task_requires">Tasks require a title and description</string>
     <string name="uncategorized">Uncategorized</string>
+    <string name="date_not_set">Date must also be set</string>
+    <string name="date_in_past">Due date cannot be in the past</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="set_priority">Set Priority</string>
+    <string name="add_category">New Category</string>
 
 </resources>

@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +18,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     private final ArrayList<Task> tasks;
     OnItemClickListener mItemClickListener;
+    OnItemLongClickListener mItemLongClickListener;
 
     // Provide a suitable constructor (depends on the kind of dataset)
     public RecyclerViewAdapter(ArrayList<Task> taskIn) {
@@ -52,11 +54,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         this.mItemClickListener = mItemClickListener;
     }
 
-    public interface OnItemClickListener {
-        public void onItemClick(View view , int position);
+    public void SetOnItemLongClickListener(final OnItemLongClickListener mItemLongClickListener) {
+        this.mItemLongClickListener = mItemLongClickListener;
     }
 
-    public class RecyclerItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public interface OnItemLongClickListener {
+        public void onItemLongClick(View view, int position);
+    }
+
+    public interface OnItemClickListener {
+        public void onItemClick(View view, int position);
+    }
+
+    public class RecyclerItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
+        View.OnLongClickListener{
 
         //views
         public TextView taskTitleTextView;
@@ -68,6 +79,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             taskTitleTextView = (TextView) itemView.findViewById(R.id.taskTitle);
             taskDescTextView = (TextView) itemView.findViewById(R.id.taskDesc);
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
         @Override
@@ -75,6 +87,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             if (mItemClickListener != null) {
                 mItemClickListener.onItemClick(v, getPosition());
             }
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            if (mItemLongClickListener != null) {
+                mItemLongClickListener.onItemLongClick(v, getPosition());
+            }
+            return true;
         }
     }
 
