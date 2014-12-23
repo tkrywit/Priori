@@ -23,9 +23,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:src="@drawable/ic_add_white_48dp"
+        android:src="@drawable/ic_add_white_24dp"
         app:floatingActionButtonColor="@color/material_red_A400"
-        app:floatingActionButtonSize="mini" />
+        app:floatingActionButtonSize="normal" />
 
 
 </RelativeLayout>

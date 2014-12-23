@@ -51,9 +51,6 @@ public class MainListFragment extends Fragment {
         if (taskList == null) {
             taskList = new TaskList(getActivity());
         }
-
-
-
     }
 
     @Override
@@ -84,7 +81,7 @@ public class MainListFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        adapter = new RecyclerViewAdapter(taskList.getTaskList());
+        adapter = new RecyclerViewAdapter(taskList, getActivity());
         //initialize task list
         adapter.SetOnItemClickListener(new RecyclerViewAdapter.OnItemClickListener() {
 
@@ -134,6 +131,11 @@ public class MainListFragment extends Fragment {
     //get the category list for passing to other fragments
     public ArrayList<String> getCategoryList() {
         return taskList.getCategoryList();
+    }
+
+    public void addCategory(String category) {
+        taskList.addCategory(category);
+        jUtil.saveFile(taskList, "saveData");
     }
 
 

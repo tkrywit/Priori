@@ -19,12 +19,14 @@
     <string name="action_cancel">Cancel</string>
     <string name="sample_date">No Due Date</string>
     <string name="sample_time">No Due Time</string>
-    <string name="new_task_requires">Tasks require a title and description</string>
+    <string name="new_task_requires">Tasks require a title</string>
     <string name="uncategorized">Uncategorized</string>
-    <string name="date_not_set">Date must also be set</string>
+    <string name="time_not_set">Date must also be set</string>
     <string name="date_in_past">Due date cannot be in the past</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="set_priority">Set Priority</string>
     <string name="add_category">New Category</string>
+    <string name="create_category">Create New Category</string>
+    <string name="task_icon_text">EX</string>
 
 </resources>

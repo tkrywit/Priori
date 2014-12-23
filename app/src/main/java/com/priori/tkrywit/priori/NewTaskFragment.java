@@ -1,13 +1,9 @@
 package com.priori.tkrywit.priori;
 
-
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,16 +17,13 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
-
 
 public class NewTaskFragment extends Fragment implements View.OnClickListener,
         AdapterView.OnItemSelectedListener {
 
-    String currentCategory;
+    private String currentCategory;
     private OnNewTaskSelectedListener mListener;
     private TextView dateTextView;
     private TextView timeTextView;
@@ -38,14 +31,16 @@ public class NewTaskFragment extends Fragment implements View.OnClickListener,
     private Calendar dueDate;
     private Calendar dueTime;
     private int priority;
+    private ArrayAdapter<String> adapter;
     private ArrayList<String> categories;
+    private Spinner spinner;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         dueDate = null;
         dueTime = null;
-
+        priority = 4;
         setHasOptionsMenu(true);
     }
 
@@ -69,14 +64,13 @@ public class NewTaskFragment extends Fragment implements View.OnClickListener,
         timeTextView = (TextView) view.findViewById(R.id.timeTextView);
 
         //set up spinner
-        Spinner spinner = (Spinner) view.findViewById(R.id.categorySpinner);
+        spinner = (Spinner) view.findViewById(R.id.categorySpinner);
 
         //request current category list from main list frag via activity
         mListener.updateCategoryList();
-        categories.add(getResources().getString(R.string.add_category));
         currentCategory = categories.get(0);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this.getActivity(),
+        adapter = new ArrayAdapter<>(this.getActivity(),
                 android.R.layout.simple_spinner_item, categories);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -128,7 +122,11 @@ public class NewTaskFragment extends Fragment implements View.OnClickListener,
     //handle spinner selection
     public void onItemSelected(AdapterView<?> parent, View view,
                                int pos, long id) {
-        Log.d("Gubs", "Spinner item selected at " + String.valueOf(pos));
+        //if New Category selected
+        if (pos == (categories.size() - 1)) {
+            DialogFragment catFragment = new NewCategoryFragment();
+            catFragment.show(getFragmentManager(), "category");
+        }
 
     }
 
@@ -163,40 +161,32 @@ public class NewTaskFragment extends Fragment implements View.OnClickListener,
         EditText desc = (EditText) getActivity().findViewById(R.id.editDesc);
         String newTitle = title.getText().toString();
         String newDesc = desc.getText().toString();
-        //if title or description are not set
-        if (newTitle.length() == 0 || newDesc.length() == 0) {
-            Toast toast = Toast.makeText(getActivity(), R.string.new_task_requires, Toast.LENGTH_LONG);
-            toast.show();
-            return null;
-        }
 
-        //if date is set but time is not
-        if (dueDate != null && dueTime == null) {
-            Toast toast = Toast.makeText(getActivity(), R.string.date_not_set, Toast.LENGTH_LONG);
+        //if title is not set
+        if (newTitle.length() == 0) {
+            Toast toast = Toast.makeText(getActivity(), R.string.new_task_requires, Toast.LENGTH_LONG);
             toast.show();
             return null;
         }
 
         //if time is set but date is not
         if (dueDate == null && dueTime != null) {
-            Toast toast = Toast.makeText(getActivity(), R.string.date_not_set, Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(getActivity(), R.string.time_not_set, Toast.LENGTH_LONG);
             toast.show();
             return null;
         }
 
-        Task newTask;
-
+        //combine date and time fields into one calendar
         if (dueDate != null && dueTime != null) {
             dueDate.set(Calendar.HOUR, dueTime.get(Calendar.HOUR));
             dueDate.set(Calendar.MINUTE, dueTime.get(Calendar.HOUR));
-            newTask = new Task(newTitle, newDesc, currentCategory, null, dueDate, priority);
-
-            return newTask;
         }
 
-        newTask = new Task(newTitle, newDesc);
+        if (dueDate == null && dueTime == null) {
+            return new Task(newTitle, newDesc, currentCategory, null, null, priority);
+        }
 
-        return newTask;
+        return new Task(newTitle, newDesc, currentCategory, null, dueDate, priority);
     }
 
     //pass the calendar object from date picker back to the fragment
@@ -219,25 +209,42 @@ public class NewTaskFragment extends Fragment implements View.OnClickListener,
         //not sure if we actually want to do this from a design perspective
         switch (pri) {
             case 0:
-                getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.material_red_A400));
+                getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.priority_critical_red_accent));
+                priorityButton.setTextColor(getResources().getColor(R.color.priority_critical_red));
                 break;
             case 1:
-                getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.material_orange_700));
+                getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.priority_high_orange_accent));
+                priorityButton.setTextColor(getResources().getColor(R.color.priority_high_orange));
                 break;
             case 2:
-                getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.material_yellow_A400));
+                getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.priority_med_yellow_accent));
+                priorityButton.setTextColor(getResources().getColor(R.color.priority_med_yellow));
                 break;
             case 3:
-                getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.material_green_A400));
+                getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.priority_low_green_accent));
+                priorityButton.setTextColor(getResources().getColor(R.color.priority_low_green));
                 break;
             default:
-                getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.material_grey_700));
+                getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.priority_none_grey_accent));
+                priorityButton.setTextColor(getResources().getColor(R.color.priority_none_grey));
                 break;
         }
     }
 
     public void setCategoryList(ArrayList<String> cats) {
         categories = cats;
+    }
+
+    public void addNewCategory(String newCat) {
+        if (newCat != null) {
+            mListener.addCategory(newCat);
+            mListener.updateCategoryList();
+            adapter.notifyDataSetChanged();
+            spinner.setSelection(0);
+            currentCategory = categories.get(0);
+        } else {
+            spinner.setSelection(categories.size() - 2);
+        }
     }
 
     //listener callback
@@ -247,6 +254,7 @@ public class NewTaskFragment extends Fragment implements View.OnClickListener,
 
         //get or update category list
         public void updateCategoryList();
+        public void addCategory(String category);
     }
 
 }

@@ -1,28 +1,26 @@
 package com.priori.tkrywit.priori;
 
+import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.ArrayList;
 
 /**
  * Created by Thomas on 11/28/2014.
  */
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RecyclerItemViewHolder> {
 
-    private final ArrayList<Task> tasks;
+    private final TaskList taskList;
     OnItemClickListener mItemClickListener;
     OnItemLongClickListener mItemLongClickListener;
+    Activity activity;
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public RecyclerViewAdapter(ArrayList<Task> taskIn) {
-        tasks = taskIn;
+    public RecyclerViewAdapter(TaskList taskIn, Activity act) {
+        activity = act;
+        taskList = taskIn;
     }
 
     // Create new views (invoked by the layout manager)
@@ -40,14 +38,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(RecyclerItemViewHolder holder, int position) {
 
         //bind views to data
-        holder.taskTitleTextView.setText(tasks.get(position).getTitle());
-        holder.taskDescTextView.setText(tasks.get(position).getDesc());
+        holder.taskTitleTextView.setText(taskList.getTaskList().get(position).getTitle());
+        holder.taskDescTextView.setText(taskList.getTaskList().get(position).getDesc());
+        holder.iconTextView.setText(CategoryHelper.getAbbrevName(taskList.getTaskList().get(position).getCategory()));
+        if (taskList.getTaskList().get(position).getPriority() == 0) {
+            holder.iconTextView.setBackground(activity.getResources().getDrawable(R.drawable.circle_critical));
+        }
+
     }
 
     // Return the size of your data set (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return tasks.size();
+        return taskList.getTaskList().size();
     }
 
     public void SetOnItemClickListener(final OnItemClickListener mItemClickListener) {
@@ -72,12 +75,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         //views
         public TextView taskTitleTextView;
         public TextView taskDescTextView;
+        public TextView iconTextView;
 
         //bind views
         public RecyclerItemViewHolder(View itemView) {
             super(itemView);
             taskTitleTextView = (TextView) itemView.findViewById(R.id.taskTitle);
             taskDescTextView = (TextView) itemView.findViewById(R.id.taskDesc);
+            iconTextView = (TextView) itemView.findViewById(R.id.taskIcon);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
         }

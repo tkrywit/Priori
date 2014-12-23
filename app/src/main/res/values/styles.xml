@@ -5,7 +5,6 @@
         <!-- Customize your theme here. -->
         <item name="android:spinnerItemStyle">@style/SpinnerItem</item>
         <item name="android:spinnerDropDownItemStyle">@style/SpinnerItem.DropDownItem</item>
-
         <item name="floatingActionButtonStyle">@style/AppTheme.Fab</item>
     </style>
 

@@ -5,10 +5,12 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -18,7 +20,7 @@ import java.util.Calendar;
 public class MainActivity extends Activity
         implements MainListFragment.OnFragmentInteractionListener, NewTaskFragment.OnNewTaskSelectedListener,
                     DatePickerFragment.datePickedCallback, TimePickerFragment.timePickedCallback,
-                    PriorityFragment.OnPriorityInteractionListener {
+                    PriorityFragment.OnPriorityInteractionListener, NewCategoryFragment.OnNewCategoryInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,11 +84,29 @@ public class MainActivity extends Activity
             mainFrag.addNewTask(task);
         }
         getWindow().setStatusBarColor(getResources().getColor(R.color.material_grey_700));
+
+        //hide soft keyboard
+        InputMethodManager imm = (InputMethodManager)getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        try {
+            imm.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), 0);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public void onTaskCanceled() {
         getWindow().setStatusBarColor(getResources().getColor(R.color.material_grey_700));
         getFragmentManager().popBackStack();
+
+        //hide soft keyboard
+        InputMethodManager imm = (InputMethodManager)getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        try {
+            imm.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), 0);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public void setDate(Calendar cal) {
@@ -121,4 +141,17 @@ public class MainActivity extends Activity
         NewTaskFragment newTaskFragment = (NewTaskFragment) fm.findFragmentByTag("newTaskFrag");
         newTaskFragment.passPriority(which);
     }
+
+    public void newCategory(String newCat) {
+        FragmentManager fm = getFragmentManager();
+        NewTaskFragment newTaskFragment = (NewTaskFragment) fm.findFragmentByTag("newTaskFrag");
+        newTaskFragment.addNewCategory(newCat);
+    }
+
+    public void addCategory(String category) {
+        FragmentManager fm = getFragmentManager();
+        MainListFragment mainFrag = (MainListFragment) fm.findFragmentByTag("mainFrag");
+        mainFrag.addCategory(category);
+    }
+
 }

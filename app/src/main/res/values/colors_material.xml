@@ -17,6 +17,24 @@
 <!-- Colors specific to Material themes.
      Taken from: sdk/platforms/android-L/data/res/values/colors_material.xml -->
 <resources>
+
+    <!-- Priority base and accent colors -->
+    <color name="priority_critical_red">@color/material_red_500</color>
+    <color name="priority_critical_red_accent">@color/material_red_A400</color>
+
+    <color name="priority_high_orange">@color/material_orange_700</color>
+    <color name="priority_high_orange_accent">@color/material_orange_700</color>
+
+    <color name="priority_med_yellow">@color/material_yellow_700</color>
+    <color name="priority_med_yellow_accent">@color/material_yellow_A400</color>
+
+    <color name="priority_low_green">@color/material_green_500</color>
+    <color name="priority_low_green_accent">@color/material_green_A400</color>
+
+    <color name="priority_none_grey">@color/button_material_dark</color>
+    <color name="priority_none_grey_accent">@color/material_grey_700</color>
+
+
     <color name="background_material_dark">#ff212121</color>
     <color name="background_material_light">#fffafafa</color>
 

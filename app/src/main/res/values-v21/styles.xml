@@ -8,5 +8,8 @@
         <item name="android:colorPrimaryDark">@color/material_grey_700</item>
         <!--   theme UI controls like checkboxes and text fields -->
         <item name="android:colorAccent">@color/material_red_500</item>
+
     </style>
+
+
 </resources>

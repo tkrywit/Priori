@@ -109,6 +109,7 @@ public class JsonUtility {
                 }
 
                 Task task = new Task(title, desc, category, dateCreated, dateDue, priority);
+
                 taskArray.add(task);
             }
 

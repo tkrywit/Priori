@@ -1,6 +1,6 @@
 package com.priori.tkrywit.priori;
 
-import android.content.Context;
+import android.app.Activity;
 import java.util.ArrayList;
 
 /**
@@ -8,16 +8,21 @@ import java.util.ArrayList;
  * Container class for a category and task list
  */
 public class TaskList {
-    Context context;
+    Activity activity;
     private ArrayList<String> categoryList;
     private ArrayList<Task> taskList;
 
-    public TaskList(Context con) {
+    public TaskList(Activity act) {
         categoryList = new ArrayList<>();
         taskList = new ArrayList<>();
-        context = con;
+        activity = act;
+        categoryList.add(activity.getString(R.string.uncategorized));
+        categoryList.add(activity.getString(R.string.add_category));
+    }
 
-        categoryList.add(context.getString(R.string.uncategorized));
+
+    public void addCategory(String category) {
+        categoryList.add(0, category);
     }
 
     public ArrayList<Task> getTaskList() {

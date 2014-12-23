@@ -10,13 +10,12 @@ import java.util.Date;
  * Created by Thomas on 11/26/2014.
  */
 public class Task {
-    String title;
-    String desc;
-    String category;
-    int priority;
-
     Calendar dueDate;
     Calendar createdDate;
+    private String title;
+    private String desc;
+    private String category;
+    private int priority;
 
     //ArrayList<Task> subTasks;
 
@@ -31,33 +30,6 @@ public class Task {
             createdDate = Calendar.getInstance();
             Log.d("Gubs", "Created new date!");
         }
-    }
-
-    public Task(String titleIn, String descIn) {
-        title = titleIn;
-        desc = descIn;
-        priority = 0;
-        category = "Uncategorized";
-        dueDate = null;
-        createdDate = Calendar.getInstance();
-    }
-
-    public Task(String titleIn, String descIn, int pri) {
-        title = titleIn;
-        desc = descIn;
-        priority = pri;
-        category = "Uncategorized";
-        dueDate = null;
-        createdDate = Calendar.getInstance();
-    }
-
-    public Task(String titleIn, String descIn, String cat) {
-        title = titleIn;
-        desc = descIn;
-        priority = 0;
-        category = cat;
-        dueDate = null;
-        createdDate = Calendar.getInstance();
     }
 
     public Task(String titleIn, String descIn, String cat, int pri) {
