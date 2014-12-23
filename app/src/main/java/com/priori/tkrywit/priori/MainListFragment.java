@@ -26,7 +26,6 @@ import java.util.Date;
 public class MainListFragment extends Fragment {
 
     TaskList taskList;
-    JsonUtility jUtil;
 
     private RecyclerView recyclerView;
     private RecyclerViewAdapter adapter;
@@ -45,13 +44,6 @@ public class MainListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //need to save and load data
-        jUtil = new JsonUtility(getActivity());
-        taskList = jUtil.loadFile("saveData");
-        if (taskList == null) {
-            taskList = new TaskList(getActivity());
-        }
         lastSelectedListItem = null;
     }
 
@@ -82,7 +74,7 @@ public class MainListFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        mListener.getCurrentTaskList();
         adapter = new RecyclerViewAdapter(taskList, getActivity());
         //initialize task list
         adapter.SetOnItemClickListener(new RecyclerViewAdapter.OnItemClickListener() {
@@ -123,39 +115,15 @@ public class MainListFragment extends Fragment {
         mListener = null;
     }
 
-
-    //add new task to adapter
-    public void addNewTask(Task newTask) {
-        taskList.getTaskList().add(newTask);
-        adapter.notifyDataSetChanged();
-        //save data
-        jUtil.saveFile(taskList, "saveData");
+    public void updateTaskList(TaskList tl) {
+        taskList = tl;
     }
-
-    public void deleteListItem(int position) {
-        taskList.deleteListItem(position);
-        adapter.notifyDataSetChanged();
-        jUtil.saveFile(taskList, "saveData");
-        if (lastSelectedListItem != null) {
-            lastSelectedListItem.setBackgroundColor(getResources().getColor(R.color.list_background));
-        }
-    }
-
-    //get the category list for passing to other fragments
-    public ArrayList<String> getCategoryList() {
-        return taskList.getCategoryList();
-    }
-
-    public void addCategory(String category) {
-        taskList.addCategory(category);
-        jUtil.saveFile(taskList, "saveData");
-    }
-
 
     public interface OnFragmentInteractionListener {
 
         public void onNewTaskClick();
         public void onRecyclerItemClick(int item);
         public void onRecyclerItemLongClick(int item);
+        public void getCurrentTaskList();
     }
 }

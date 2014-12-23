@@ -23,7 +23,7 @@ import java.util.Calendar;
 public class NewTaskFragment extends Fragment implements View.OnClickListener,
         AdapterView.OnItemSelectedListener {
 
-    private String currentCategory;
+    private int currentCategory;
     private OnNewTaskSelectedListener mListener;
     private TextView dateTextView;
     private TextView timeTextView;
@@ -68,7 +68,7 @@ public class NewTaskFragment extends Fragment implements View.OnClickListener,
 
         //request current category list from main list frag via activity
         mListener.updateCategoryList();
-        currentCategory = categories.get(0);
+        currentCategory = 0;
 
         adapter = new ArrayAdapter<>(this.getActivity(),
                 android.R.layout.simple_spinner_item, categories);
@@ -126,12 +126,13 @@ public class NewTaskFragment extends Fragment implements View.OnClickListener,
         if (pos == (categories.size() - 1)) {
             DialogFragment catFragment = new NewCategoryFragment();
             catFragment.show(getFragmentManager(), "category");
+        } else {
+            currentCategory = pos;
         }
-
     }
 
     public void onNothingSelected(AdapterView<?> parent) {
-        // Another interface callback
+        spinner.setSelection(0);
     }
 
     @Override
@@ -183,10 +184,10 @@ public class NewTaskFragment extends Fragment implements View.OnClickListener,
         }
 
         if (dueDate == null && dueTime == null) {
-            return new Task(newTitle, newDesc, currentCategory, null, null, priority);
+            return new Task(newTitle, newDesc, categories.get(currentCategory), null, null, priority);
         }
 
-        return new Task(newTitle, newDesc, currentCategory, null, dueDate, priority);
+        return new Task(newTitle, newDesc, categories.get(currentCategory), null, dueDate, priority);
     }
 
     //pass the calendar object from date picker back to the fragment
@@ -240,10 +241,11 @@ public class NewTaskFragment extends Fragment implements View.OnClickListener,
             mListener.addCategory(newCat);
             mListener.updateCategoryList();
             adapter.notifyDataSetChanged();
+            //set spinner to new category
             spinner.setSelection(0);
-            currentCategory = categories.get(0);
+            currentCategory = 0;
         } else {
-            spinner.setSelection(categories.size() - 2);
+            spinner.setSelection(currentCategory);
         }
     }
 

@@ -14,7 +14,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-
 public class MainActivity extends Activity
         implements MainListFragment.OnFragmentInteractionListener, NewTaskFragment.OnNewTaskSelectedListener,
                     DatePickerFragment.datePickedCallback, TimePickerFragment.timePickedCallback,
@@ -22,14 +21,26 @@ public class MainActivity extends Activity
 
     Menu actionMenu;
     int listSelectedItem;
+    private TaskList taskList;
+    private JsonUtility jUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //need to save and load data
+        jUtil = new JsonUtility(this);
+        taskList = jUtil.loadFile("saveData");
+        if (taskList == null) {
+            taskList = new TaskList(this);
+        }
+
         if (savedInstanceState == null) {
+            FragmentManager fm = getFragmentManager();
+            MainListFragment mainFrag = new MainListFragment();
+            mainFrag.updateTaskList(taskList);
             getFragmentManager().beginTransaction()
-                    .add(R.id.container, new MainListFragment(), "mainFrag")
+                    .add(R.id.container, mainFrag, "mainFrag")
                     .commit();
         }
     }
@@ -53,12 +64,12 @@ public class MainActivity extends Activity
             case (R.id.action_settings):
                 return true;
             case (R.id.action_delete):
+                taskList.deleteListItem(listSelectedItem);
                 FragmentManager fm = getFragmentManager();
                 fm.popBackStack();
                 MainListFragment mainFrag = (MainListFragment) fm.findFragmentByTag("mainFrag");
-                mainFrag.deleteListItem(listSelectedItem);
-                MenuItem menuItem = actionMenu.findItem(R.id.action_delete);
-                menuItem.setVisible(false);
+                mainFrag.updateTaskList(taskList);
+                jUtil.saveFile(taskList, "saveData");
 
                 return true;
         }
@@ -89,10 +100,12 @@ public class MainActivity extends Activity
 
     public void onTaskAccepted(Task task) {
         if (task != null) {
+            taskList.getTaskList().add(task);
             FragmentManager fm = getFragmentManager();
             fm.popBackStack();
             MainListFragment mainFrag = (MainListFragment) fm.findFragmentByTag("mainFrag");
-            mainFrag.addNewTask(task);
+            mainFrag.updateTaskList(taskList);
+            jUtil.saveFile(taskList, "saveData");
         }
         getWindow().setStatusBarColor(getResources().getColor(R.color.material_grey_700));
 
@@ -141,10 +154,8 @@ public class MainActivity extends Activity
 
     public void updateCategoryList() {
         FragmentManager fm = getFragmentManager();
-        MainListFragment mainTaskFragment = (MainListFragment) fm.findFragmentByTag("mainFrag");
-        ArrayList<String> cats = mainTaskFragment.getCategoryList();
         NewTaskFragment newTaskFragment = (NewTaskFragment) fm.findFragmentByTag("newTaskFrag");
-        newTaskFragment.setCategoryList(cats);
+        newTaskFragment.setCategoryList(taskList.getCategoryList());
     }
 
     public void onPrioritySelected(int which) {
@@ -160,9 +171,13 @@ public class MainActivity extends Activity
     }
 
     public void addCategory(String category) {
+        taskList.addCategory(category);
+    }
+
+    public void getCurrentTaskList() {
         FragmentManager fm = getFragmentManager();
         MainListFragment mainFrag = (MainListFragment) fm.findFragmentByTag("mainFrag");
-        mainFrag.addCategory(category);
+        mainFrag.updateTaskList(taskList);
     }
 
 }
