@@ -9,6 +9,7 @@
         android:layout_height="40dp"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="10dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="9dp"
         android:background="@drawable/circle_base"
         android:gravity="center"

@@ -41,4 +41,8 @@ public class TaskList {
         categoryList = catIn;
     }
 
+    public void deleteListItem(int item) {
+        taskList.remove(item);
+    }
+
 }

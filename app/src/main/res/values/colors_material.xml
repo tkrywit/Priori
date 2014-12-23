@@ -32,7 +32,11 @@
     <color name="priority_low_green_accent">@color/material_green_A400</color>
 
     <color name="priority_none_grey">@color/button_material_dark</color>
+    <color name="priority_none_grey_light">@color/material_grey_500</color>
     <color name="priority_none_grey_accent">@color/material_grey_700</color>
+
+    <color name="list_highlight">@color/ripple_material_light</color>
+    <color name="list_background">@color/material_grey_300</color>
 
 
     <color name="background_material_dark">#ff212121</color>

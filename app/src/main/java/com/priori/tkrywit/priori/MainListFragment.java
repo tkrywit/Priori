@@ -31,6 +31,7 @@ public class MainListFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerViewAdapter adapter;
     private OnFragmentInteractionListener mListener;
+    private View lastSelectedListItem;
 
 
     /**
@@ -51,6 +52,7 @@ public class MainListFragment extends Fragment {
         if (taskList == null) {
             taskList = new TaskList(getActivity());
         }
+        lastSelectedListItem = null;
     }
 
     @Override
@@ -95,7 +97,9 @@ public class MainListFragment extends Fragment {
 
             @Override
             public void onItemLongClick(View v, int position) {
+                v.setBackgroundColor(getResources().getColor(R.color.list_highlight));
                 mListener.onRecyclerItemLongClick(position);
+                lastSelectedListItem = v;
             }
         });
 
@@ -126,6 +130,15 @@ public class MainListFragment extends Fragment {
         adapter.notifyDataSetChanged();
         //save data
         jUtil.saveFile(taskList, "saveData");
+    }
+
+    public void deleteListItem(int position) {
+        taskList.deleteListItem(position);
+        adapter.notifyDataSetChanged();
+        jUtil.saveFile(taskList, "saveData");
+        if (lastSelectedListItem != null) {
+            lastSelectedListItem.setBackgroundColor(getResources().getColor(R.color.list_background));
+        }
     }
 
     //get the category list for passing to other fragments

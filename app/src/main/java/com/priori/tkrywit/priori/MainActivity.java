@@ -1,8 +1,6 @@
 package com.priori.tkrywit.priori;
 
 import android.app.Activity;
-import android.app.DialogFragment;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -22,6 +20,9 @@ public class MainActivity extends Activity
                     DatePickerFragment.datePickedCallback, TimePickerFragment.timePickedCallback,
                     PriorityFragment.OnPriorityInteractionListener, NewCategoryFragment.OnNewCategoryInteractionListener {
 
+    Menu actionMenu;
+    int listSelectedItem;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +32,6 @@ public class MainActivity extends Activity
                     .add(R.id.container, new MainListFragment(), "mainFrag")
                     .commit();
         }
-
     }
 
 
@@ -39,6 +39,8 @@ public class MainActivity extends Activity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        actionMenu = menu;
+        listSelectedItem = 0;
         return true;
     }
 
@@ -47,11 +49,18 @@ public class MainActivity extends Activity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        switch (item.getItemId()) {
+            case (R.id.action_settings):
+                return true;
+            case (R.id.action_delete):
+                FragmentManager fm = getFragmentManager();
+                fm.popBackStack();
+                MainListFragment mainFrag = (MainListFragment) fm.findFragmentByTag("mainFrag");
+                mainFrag.deleteListItem(listSelectedItem);
+                MenuItem menuItem = actionMenu.findItem(R.id.action_delete);
+                menuItem.setVisible(false);
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -73,7 +82,9 @@ public class MainActivity extends Activity
     }
 
     public void onRecyclerItemLongClick(int item) {
-        Log.d("Gubs", "long click");
+        listSelectedItem = item;
+        MenuItem menuItem = actionMenu.findItem(R.id.action_delete);
+        menuItem.setVisible(true);
     }
 
     public void onTaskAccepted(Task task) {

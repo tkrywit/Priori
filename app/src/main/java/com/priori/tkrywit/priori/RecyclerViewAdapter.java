@@ -41,10 +41,24 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.taskTitleTextView.setText(taskList.getTaskList().get(position).getTitle());
         holder.taskDescTextView.setText(taskList.getTaskList().get(position).getDesc());
         holder.iconTextView.setText(CategoryHelper.getAbbrevName(taskList.getTaskList().get(position).getCategory()));
-        if (taskList.getTaskList().get(position).getPriority() == 0) {
-            holder.iconTextView.setBackground(activity.getResources().getDrawable(R.drawable.circle_critical));
-        }
 
+        //change circle logo colors depending on priority
+        switch (taskList.getTaskList().get(position).getPriority()) {
+            case 0:
+                holder.iconTextView.setBackground(activity.getResources().getDrawable(R.drawable.circle_critical));
+                break;
+            case 1:
+                holder.iconTextView.setBackground(activity.getResources().getDrawable(R.drawable.circle_high));
+                break;
+            case 2:
+                holder.iconTextView.setBackground(activity.getResources().getDrawable(R.drawable.circle_med));
+                break;
+            case 3:
+                holder.iconTextView.setBackground(activity.getResources().getDrawable(R.drawable.circle_low));
+                break;
+            default:
+                holder.iconTextView.setBackground(activity.getResources().getDrawable(R.drawable.circle_base));
+        }
     }
 
     // Return the size of your data set (invoked by the layout manager)

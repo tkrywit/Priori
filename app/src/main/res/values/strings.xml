@@ -28,5 +28,5 @@
     <string name="add_category">New Category</string>
     <string name="create_category">Create New Category</string>
     <string name="task_icon_text">EX</string>
-
+    <string name="action_delete">Delete</string>
 </resources>
