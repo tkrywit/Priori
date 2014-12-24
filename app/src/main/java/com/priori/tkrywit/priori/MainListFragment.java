@@ -5,16 +5,14 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import com.shamanland.fab.FloatingActionButton;
 import com.shamanland.fab.ShowHideOnScroll;
-import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * A fragment representing a list of Items.
@@ -32,7 +30,6 @@ public class MainListFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private View lastSelectedListItem;
 
-
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -40,17 +37,18 @@ public class MainListFragment extends Fragment {
     public MainListFragment() {
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         lastSelectedListItem = null;
+        setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_main,container,false);
         recyclerView = (RecyclerView) root.findViewById(R.id.recyclerView);
+
 
         //set up onClick listeners
         FloatingActionButton fab = (FloatingActionButton) root.findViewById(R.id.floatingActionButton);
@@ -61,6 +59,7 @@ public class MainListFragment extends Fragment {
                 mListener.onNewTaskClick();
             }
         });
+
         return root;
     }
 
@@ -99,6 +98,17 @@ public class MainListFragment extends Fragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        //hide menu items we don't need
+        MenuItem cancel = menu.findItem(R.id.action_cancel);
+        cancel.setVisible(false);
+        MenuItem accept = menu.findItem(R.id.action_accept);
+        accept.setVisible(false);
+    }
+
+    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
@@ -117,6 +127,29 @@ public class MainListFragment extends Fragment {
 
     public void updateTaskList(TaskList tl) {
         taskList = tl;
+    }
+
+    public void notifyListChange() {
+        adapter.notifyDataSetChanged();
+    }
+
+    public void notifyListDeletion(int pos) {
+        lastSelectedListItem.setBackgroundColor(getResources().getColor(R.color.cardview_light_background));
+        adapter.notifyItemRemoved(pos);
+    }
+
+    public void deselectItem() {
+        lastSelectedListItem.setBackgroundColor(getResources().getColor(R.color.cardview_light_background));
+        adapter.notifyDataSetChanged();
+    }
+
+    public void expandListItem(int item) {
+        adapter.setExpandedItem(item);
+        adapter.notifyDataSetChanged();
+    }
+
+    public void contractAllListItems() {
+        adapter.contractAllItems();
     }
 
     public interface OnFragmentInteractionListener {

@@ -9,7 +9,7 @@
     <string name="new_desc">Task Description</string>
     <string name="new_due_date">Due:</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="priority_new">Priority</string>
+    <string name="priority_new">Importance</string>
     <string name="date_button">Due Date</string>
     <string name="time_button">Due Time</string>
     <string name="dialog_create">Create</string>
@@ -23,10 +23,20 @@
     <string name="uncategorized">Uncategorized</string>
     <string name="time_not_set">Date must also be set</string>
     <string name="date_in_past">Due date cannot be in the past</string>
+    <string name="time_in_past">Time cannot be in the past</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="set_priority">Set Priority</string>
+    <string name="set_priority">Set Importance</string>
     <string name="add_category">New Category</string>
     <string name="create_category">Create New Category</string>
     <string name="task_icon_text">EX</string>
     <string name="action_delete">Delete</string>
+    <string name="due">Due:</string>
+    <string name="action_sort_due_priority">Priority</string>
+    <string name="action_sort_newest">Newest</string>
+    <string name="action_sort_oldest">Oldest</string>
+    <string name="action_sort_due_first">Due First</string>
+    <string name="action_sort_due_last">Due Last</string>
+    <string name="action_sort_due_importance">Importance</string>
+    <string name="action_sort">Sort</string>
+
 </resources>

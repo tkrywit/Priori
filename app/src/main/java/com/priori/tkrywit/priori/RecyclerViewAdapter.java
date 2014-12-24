@@ -1,11 +1,16 @@
 package com.priori.tkrywit.priori;
 
 import android.app.Activity;
+import android.content.res.TypedArray;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import java.util.Arrays;
 
 /**
  * Created by Thomas on 11/28/2014.
@@ -15,12 +20,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private final TaskList taskList;
     OnItemClickListener mItemClickListener;
     OnItemLongClickListener mItemLongClickListener;
-    Activity activity;
+    private Activity activity;
+    private boolean[] expandedList;
 
     // Provide a suitable constructor (depends on the kind of dataset)
     public RecyclerViewAdapter(TaskList taskIn, Activity act) {
         activity = act;
         taskList = taskIn;
+        expandedList = new boolean[taskList.getTaskList().size()];
+        Arrays.fill(expandedList, Boolean.FALSE);
     }
 
     // Create new views (invoked by the layout manager)
@@ -42,8 +50,27 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.taskDescTextView.setText(taskList.getTaskList().get(position).getDesc());
         holder.iconTextView.setText(CategoryHelper.getAbbrevName(taskList.getTaskList().get(position).getCategory()));
 
-        //change circle logo colors depending on priority
-        switch (taskList.getTaskList().get(position).getPriority()) {
+        if (expandedList[position]) {
+            holder.expLayout.setVisibility(View.VISIBLE);
+            holder.priorityTextView.setText(activity.getResources()
+                    .getStringArray(R.array.priorities)[taskList.getTaskList().get(position).getImportance()]);
+
+            //too much for UI thread?
+            TypedArray priorityColors = activity.getResources().obtainTypedArray(R.array.priority_colors);
+            holder.priorityTextView.setTextColor(activity.getResources().getColor(priorityColors.
+                    getResourceId(taskList.getTaskList().get(position).getImportance(), -1)));
+            priorityColors.recycle();
+
+            holder.categoryTextView.setText(taskList.getTaskList().get(position).getCategory());
+            holder.dueDateTextView.setText(CalendarHelper.getDateTimeString(activity, taskList.getTaskList().get(position).getDueDate()));
+            holder.editTaskImageView.setVisibility(View.VISIBLE);
+        } else {
+            holder.expLayout.setVisibility(View.GONE);
+            holder.editTaskImageView.setVisibility(View.GONE);
+        }
+
+            //change circle logo colors depending on priority
+        switch (taskList.getTaskList().get(position).getImportance()) {
             case 0:
                 holder.iconTextView.setBackground(activity.getResources().getDrawable(R.drawable.circle_critical));
                 break;
@@ -75,6 +102,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         this.mItemLongClickListener = mItemLongClickListener;
     }
 
+    //set inflated list view item
+    public void setExpandedItem(int exp) {
+        //toggle list of expanded items
+        expandedList[exp] = !expandedList[exp];
+    }
+
+    //close all expanded items
+    public void contractAllItems() {
+        Arrays.fill(expandedList, Boolean.FALSE);
+    }
+
     public interface OnItemLongClickListener {
         public void onItemLongClick(View view, int position);
     }
@@ -90,6 +128,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public TextView taskTitleTextView;
         public TextView taskDescTextView;
         public TextView iconTextView;
+        public TextView priorityTextView;
+        public TextView dueDateTextView;
+        public TextView categoryTextView;
+        public ImageView editTaskImageView;
+        public RelativeLayout expLayout;
+
 
         //bind views
         public RecyclerItemViewHolder(View itemView) {
@@ -97,6 +141,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             taskTitleTextView = (TextView) itemView.findViewById(R.id.taskTitle);
             taskDescTextView = (TextView) itemView.findViewById(R.id.taskDesc);
             iconTextView = (TextView) itemView.findViewById(R.id.taskIcon);
+            priorityTextView = (TextView) itemView.findViewById(R.id.listExpandedPriority);
+            dueDateTextView = (TextView) itemView.findViewById(R.id.listExpandedDueDate);
+            categoryTextView = (TextView) itemView.findViewById(R.id.listExpandedCategory);
+            editTaskImageView = (ImageView) itemView.findViewById(R.id.editButton);
+            expLayout = (RelativeLayout) itemView.findViewById(R.id.expandListItem);
+
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
         }

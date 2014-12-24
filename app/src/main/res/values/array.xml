@@ -8,4 +8,29 @@
         <item>Low</item>
         <item>None</item>
     </string-array>
+    <string-array
+        name="sort_types">
+        <item>Priority</item>
+        <item>Importance</item>
+        <item>Due First</item>
+        <item>Due Last</item>
+        <item>Newest</item>
+        <item>Oldest</item>
+    </string-array>
+
+    <array name="priority_colors">
+        <item>@color/material_red_500</item>
+        <item>@color/material_orange_700</item>
+        <item>@color/material_yellow_700</item>
+        <item>@color/material_green_500</item>
+        <item>@color/button_material_dark</item>
+    </array>
+
+    <array name="priority_colors_accent">
+        <item>@color/material_red_A400</item>
+        <item>@color/material_orange_700</item>
+        <item>@color/material_yellow_A400</item>
+        <item>@color/material_green_A400</item>
+        <item>@color/material_grey_700</item>
+    </array>
 </resources>

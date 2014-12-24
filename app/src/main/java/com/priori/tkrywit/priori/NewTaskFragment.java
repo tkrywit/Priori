@@ -3,6 +3,7 @@ package com.priori.tkrywit.priori;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -75,14 +76,22 @@ public class NewTaskFragment extends Fragment implements View.OnClickListener,
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
+        //set spinner to "Uncategorized"
+        spinner.setSelection(categories.size() - 2);
 
         return view;
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-        // Inflate the menu items for use in the action bar
-        menuInflater.inflate(R.menu.menu_new_task, menu);
+        super.onCreateOptionsMenu(menu, menuInflater);
+
+        //hide action bar items we don't need
+        MenuItem sort = menu.findItem(R.id.action_sort);
+        sort.setVisible(false);
+        MenuItem settings = menu.findItem(R.id.action_settings);
+        settings.setVisible(false);
+
     }
 
     @Override
@@ -207,29 +216,16 @@ public class NewTaskFragment extends Fragment implements View.OnClickListener,
         priority = pri;
         priorityButton.setText(getResources().getStringArray(R.array.priorities)[pri]);
 
-        //not sure if we actually want to do this from a design perspective
-        switch (pri) {
-            case 0:
-                getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.priority_critical_red_accent));
-                priorityButton.setTextColor(getResources().getColor(R.color.priority_critical_red));
-                break;
-            case 1:
-                getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.priority_high_orange_accent));
-                priorityButton.setTextColor(getResources().getColor(R.color.priority_high_orange));
-                break;
-            case 2:
-                getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.priority_med_yellow_accent));
-                priorityButton.setTextColor(getResources().getColor(R.color.priority_med_yellow));
-                break;
-            case 3:
-                getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.priority_low_green_accent));
-                priorityButton.setTextColor(getResources().getColor(R.color.priority_low_green));
-                break;
-            default:
-                getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.priority_none_grey_accent));
-                priorityButton.setTextColor(getResources().getColor(R.color.priority_none_grey));
-                break;
-        }
+        //get desired colors from string array resource of priority colors
+        //avoids long switch-case statement
+        TypedArray priorityColors = getResources().obtainTypedArray(R.array.priority_colors);
+        TypedArray priorityColorsAccent = getResources().obtainTypedArray(R.array.priority_colors_accent);
+
+        getActivity().getWindow().setStatusBarColor(getActivity().getResources().getColor(priorityColorsAccent.getResourceId(pri, -1)));
+        priorityButton.setTextColor(getResources().getColor(priorityColors.getResourceId(pri, -1)));
+
+        priorityColors.recycle();
+        priorityColorsAccent.recycle();
     }
 
     public void setCategoryList(ArrayList<String> cats) {

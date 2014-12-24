@@ -50,12 +50,10 @@ public class JsonUtility {
                 jsonItem.put("title", task.getTitle());
                 jsonItem.put("desc", task.getDesc());
                 jsonItem.put("category", task.getCategory());
-                jsonItem.put("priority", task.getPriority());
+                jsonItem.put("priority", task.getImportance());
 
                 //serialize dates
-                if (task.getCreatedDate() != null) {
-                    jsonItem.put("dateCreated", task.getCreatedDate().getTimeInMillis());
-                }
+                jsonItem.put("dateCreated", task.getCreatedDate().getTimeInMillis());
                 if (task.getDueDate() != null) {
                     jsonItem.put("dateDue", task.getDueDate().getTimeInMillis());
                 }
@@ -98,13 +96,12 @@ public class JsonUtility {
                 String desc = jsonObj.getString("desc");
                 String category = jsonObj.getString("category");
                 int priority = jsonObj.getInt("priority");
-
                 Calendar dateCreated = Calendar.getInstance();
-                Calendar dateDue = Calendar.getInstance();
-                if (jsonObj.has("dateCreated")) {
-                    dateCreated.setTimeInMillis(jsonObj.getLong("dateCreated"));
-                }
+
+                Calendar dateDue = null;
+                dateCreated.setTimeInMillis(jsonObj.getLong("dateCreated"));
                 if (jsonObj.has("dateDue")) {
+                    dateDue = Calendar.getInstance();
                     dateDue.setTimeInMillis(jsonObj.getLong("dateDue"));
                 }
 

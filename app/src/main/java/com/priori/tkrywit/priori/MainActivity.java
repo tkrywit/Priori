@@ -1,5 +1,6 @@
 package com.priori.tkrywit.priori;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -7,12 +8,12 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
-
-import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 
 public class MainActivity extends Activity
         implements MainListFragment.OnFragmentInteractionListener, NewTaskFragment.OnNewTaskSelectedListener,
@@ -21,6 +22,7 @@ public class MainActivity extends Activity
 
     Menu actionMenu;
     int listSelectedItem;
+    private boolean itemSelected;
     private TaskList taskList;
     private JsonUtility jUtil;
 
@@ -36,23 +38,24 @@ public class MainActivity extends Activity
         }
 
         if (savedInstanceState == null) {
-            FragmentManager fm = getFragmentManager();
             MainListFragment mainFrag = new MainListFragment();
             mainFrag.updateTaskList(taskList);
             getFragmentManager().beginTransaction()
                     .add(R.id.container, mainFrag, "mainFrag")
                     .commit();
         }
+        itemSelected = false;
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+
         actionMenu = menu;
         listSelectedItem = 0;
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -62,19 +65,77 @@ public class MainActivity extends Activity
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case (R.id.action_settings):
-                return true;
+                Log.d("Gubs", "Settings works");
+                break;
             case (R.id.action_delete):
-                taskList.deleteListItem(listSelectedItem);
                 FragmentManager fm = getFragmentManager();
+                Log.d("Gubs", "Delete works");
+                taskList.deleteListItem(listSelectedItem);
                 fm.popBackStack();
                 MainListFragment mainFrag = (MainListFragment) fm.findFragmentByTag("mainFrag");
                 mainFrag.updateTaskList(taskList);
+                mainFrag.notifyListDeletion(listSelectedItem);
+                itemSelected = false;
                 jUtil.saveFile(taskList, "saveData");
-
-                return true;
+                actionMenu.findItem(R.id.action_delete).setVisible(false);
+                break;
+            case (R.id.menuSortPriority):
+                sortTaskList(SORT_TYPE.PRIORITY);
+                break;
+            case (R.id.menuSortImportance):
+                sortTaskList(SORT_TYPE.IMPORTANCE);
+                break;
+            case (R.id.menuSortDueFirst):
+                sortTaskList(SORT_TYPE.DUE_FIRST);
+                break;
+            case (R.id.menuSortDueLast):
+                sortTaskList(SORT_TYPE.DUE_LAST);
+                break;
+            case (R.id.menuSortNewest):
+                sortTaskList(SORT_TYPE.NEWEST);
+                break;
+            case (R.id.menuSortOldest):
+                sortTaskList(SORT_TYPE.OLDEST);
+                break;
         }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    private void sortTaskList(SORT_TYPE type) {
+
+        //better way to do this
+        switch (type) {
+            case PRIORITY:
+                Collections.sort(taskList.getTaskList(), Task.COMPARE_BY_PRIORITY);
+                break;
+            case IMPORTANCE:
+                Collections.sort(taskList.getTaskList(), Task.COMPARE_BY_IMPORTANCE);
+                break;
+            case DUE_FIRST:
+                Collections.sort(taskList.getTaskList(), Task.COMPARE_BY_DUE_FIRST);
+                break;
+            case DUE_LAST:
+                Collections.sort(taskList.getTaskList(), Task.COMPARE_BY_DUE_LAST);
+                break;
+            case NEWEST:
+                Collections.sort(taskList.getTaskList(), Task.COMPARE_BY_NEWEST);
+                break;
+            case OLDEST:
+                Collections.sort(taskList.getTaskList(), Task.COMPARE_BY_OLDEST);
+                break;
+
+        }
+        //set title bar to respective sort method
+        try {
+            getActionBar().setTitle(getResources().getStringArray(R.array.sort_types)[type.ordinal()]);
+        } catch (NullPointerException np) {
+            np.printStackTrace();
+        }
+        FragmentManager fm = getFragmentManager();
+        MainListFragment frag = (MainListFragment) fm.findFragmentByTag("mainFrag");
+        frag.updateTaskList(taskList);
+        frag.contractAllListItems();
+        frag.notifyListChange();
     }
 
     //callback method for the floating action button
@@ -82,18 +143,32 @@ public class MainActivity extends Activity
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.container, new NewTaskFragment(), "newTaskFrag");
         transaction.addToBackStack(null);
-
         transaction.commit();
     }
 
+    //Callback methods below
+
     //handle list clicks by launching the item view fragment
     public void onRecyclerItemClick(int item) {
-        String s = String.valueOf(item);
-        Log.d("Gubs", "Pressedddd" + s);
+        FragmentManager fm = getFragmentManager();
+        MainListFragment mainFrag = (MainListFragment) fm.findFragmentByTag("mainFrag");
+
+        MenuItem menuItem = actionMenu.findItem(R.id.action_delete);
+        menuItem.setVisible(false);
+
+        //temporary solution to deselecting tasks when cancelling deletion
+        Log.d("Gubs", String.valueOf(itemSelected));
+        if (itemSelected) {
+            mainFrag.deselectItem();
+            itemSelected = false;
+        } else {
+            mainFrag.expandListItem(item);
+        }
     }
 
     public void onRecyclerItemLongClick(int item) {
         listSelectedItem = item;
+        itemSelected = true;
         MenuItem menuItem = actionMenu.findItem(R.id.action_delete);
         menuItem.setVisible(true);
     }
@@ -134,7 +209,6 @@ public class MainActivity extends Activity
     }
 
     public void setDate(Calendar cal) {
-
         //ensure date is not in past
         if (cal.before(Calendar.getInstance())) {
             Toast toast = Toast.makeText(getApplicationContext(), R.string.date_in_past, Toast.LENGTH_LONG);
@@ -147,9 +221,15 @@ public class MainActivity extends Activity
     }
 
     public void setTime(Calendar cal) {
-        FragmentManager fm = getFragmentManager();
-        NewTaskFragment newTaskFragment = (NewTaskFragment) fm.findFragmentByTag("newTaskFrag");
-        newTaskFragment.passTime(cal);
+        //ensure time is not in the past
+        if (cal.before(Calendar.getInstance())) {
+            Toast toast = Toast.makeText(getApplicationContext(), R.string.time_in_past, Toast.LENGTH_LONG);
+            toast.show();
+        } else {
+            FragmentManager fm = getFragmentManager();
+            NewTaskFragment newTaskFragment = (NewTaskFragment) fm.findFragmentByTag("newTaskFrag");
+            newTaskFragment.passTime(cal);
+        }
     }
 
     public void updateCategoryList() {
@@ -179,5 +259,7 @@ public class MainActivity extends Activity
         MainListFragment mainFrag = (MainListFragment) fm.findFragmentByTag("mainFrag");
         mainFrag.updateTaskList(taskList);
     }
+
+    enum SORT_TYPE {PRIORITY, IMPORTANCE, DUE_FIRST, DUE_LAST, NEWEST, OLDEST}
 
 }
