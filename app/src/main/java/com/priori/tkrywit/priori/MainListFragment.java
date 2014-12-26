@@ -23,8 +23,7 @@ import com.shamanland.fab.ShowHideOnScroll;
  */
 public class MainListFragment extends Fragment {
 
-    TaskList taskList;
-
+    private TaskList taskList;
     private RecyclerView recyclerView;
     private RecyclerViewAdapter adapter;
     private OnFragmentInteractionListener mListener;
@@ -134,7 +133,6 @@ public class MainListFragment extends Fragment {
     }
 
     public void notifyListDeletion(int pos) {
-        lastSelectedListItem.setBackgroundColor(getResources().getColor(R.color.cardview_light_background));
         adapter.notifyItemRemoved(pos);
     }
 

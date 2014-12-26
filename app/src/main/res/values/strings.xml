@@ -31,6 +31,7 @@
     <string name="task_icon_text">EX</string>
     <string name="action_delete">Delete</string>
     <string name="due">Due:</string>
+    <string name="category">Categories</string>
     <string name="action_sort_due_priority">Priority</string>
     <string name="action_sort_newest">Newest</string>
     <string name="action_sort_oldest">Oldest</string>
@@ -38,5 +39,9 @@
     <string name="action_sort_due_last">Due Last</string>
     <string name="action_sort_due_importance">Importance</string>
     <string name="action_sort">Sort</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+    <string name="all_categories">Show All</string>
+    <string name="all">All</string>
 
 </resources>

@@ -27,7 +27,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public RecyclerViewAdapter(TaskList taskIn, Activity act) {
         activity = act;
         taskList = taskIn;
-        expandedList = new boolean[taskList.getTaskList().size()];
+        expandedList = new boolean[taskList.getActiveList().size()];
         Arrays.fill(expandedList, Boolean.FALSE);
     }
 
@@ -46,23 +46,23 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(RecyclerItemViewHolder holder, int position) {
 
         //bind views to data
-        holder.taskTitleTextView.setText(taskList.getTaskList().get(position).getTitle());
-        holder.taskDescTextView.setText(taskList.getTaskList().get(position).getDesc());
-        holder.iconTextView.setText(CategoryHelper.getAbbrevName(taskList.getTaskList().get(position).getCategory()));
+        holder.taskTitleTextView.setText(taskList.getActiveList().get(position).getTitle());
+        holder.taskDescTextView.setText(taskList.getActiveList().get(position).getDesc());
+        holder.iconTextView.setText(CategoryHelper.getAbbrevName(taskList.getActiveList().get(position).getCategory()));
 
         if (expandedList[position]) {
             holder.expLayout.setVisibility(View.VISIBLE);
             holder.priorityTextView.setText(activity.getResources()
-                    .getStringArray(R.array.priorities)[taskList.getTaskList().get(position).getImportance()]);
+                    .getStringArray(R.array.priorities)[taskList.getActiveList().get(position).getImportance()]);
 
             //too much for UI thread?
             TypedArray priorityColors = activity.getResources().obtainTypedArray(R.array.priority_colors);
             holder.priorityTextView.setTextColor(activity.getResources().getColor(priorityColors.
-                    getResourceId(taskList.getTaskList().get(position).getImportance(), -1)));
+                    getResourceId(taskList.getActiveList().get(position).getImportance(), -1)));
             priorityColors.recycle();
 
-            holder.categoryTextView.setText(taskList.getTaskList().get(position).getCategory());
-            holder.dueDateTextView.setText(CalendarHelper.getDateTimeString(activity, taskList.getTaskList().get(position).getDueDate()));
+            holder.categoryTextView.setText(taskList.getActiveList().get(position).getCategory());
+            holder.dueDateTextView.setText(CalendarHelper.getDateTimeString(activity, taskList.getActiveList().get(position).getDueDate()));
             holder.editTaskImageView.setVisibility(View.VISIBLE);
         } else {
             holder.expLayout.setVisibility(View.GONE);
@@ -70,7 +70,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
 
             //change circle logo colors depending on priority
-        switch (taskList.getTaskList().get(position).getImportance()) {
+        switch (taskList.getActiveList().get(position).getImportance()) {
             case 0:
                 holder.iconTextView.setBackground(activity.getResources().getDrawable(R.drawable.circle_critical));
                 break;
@@ -91,7 +91,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     // Return the size of your data set (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return taskList.getTaskList().size();
+        return taskList.getActiveList().size();
     }
 
     public void SetOnItemClickListener(final OnItemClickListener mItemClickListener) {
@@ -166,9 +166,5 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             return true;
         }
     }
-
-
-
-
 }
 

@@ -9,12 +9,10 @@ public final class CategoryHelper {
 
     public static String getAbbrevName(String name) {
 
-        String aName;
-        if (name.contains(" ")) {
-            String[] words = name.split(" ");
-            aName = (words[0].substring(0,1) + words[1].substring(0,1));
-        } else {
-            aName = (name.substring(0,2));
+        String aName = (name.substring(0,2));
+        String[] words = name.split(" ");
+        if (words.length > 1) {
+            aName = (words[0].substring(0, 1) + words[1].substring(0, 1));
         }
         return aName.toUpperCase();
     }

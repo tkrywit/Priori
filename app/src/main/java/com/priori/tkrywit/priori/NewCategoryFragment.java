@@ -43,7 +43,7 @@ public class NewCategoryFragment extends DialogFragment {
             })
             .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
-                    mListener.newCategory(null);
+                    //do nothing
                 }
             });
     // Create the AlertDialog object and return it

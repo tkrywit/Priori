@@ -44,7 +44,7 @@ public class JsonUtility {
             jsonArray.put(jsonObject);
 
             //serialize tasks
-            for (Task task : taskList.getTaskList()) {
+            for (Task task : taskList.getMasterList()) {
                 //handle primary task fields
                 JSONObject jsonItem = new JSONObject();
                 jsonItem.put("title", task.getTitle());

@@ -201,15 +201,39 @@ public class NewTaskFragment extends Fragment implements View.OnClickListener,
 
     //pass the calendar object from date picker back to the fragment
     public void passDate(Calendar cal) {
-        dueDate = cal;
-        dateTextView.setText(CalendarHelper.getDateString(cal));
-
+        //ensure date is not in past
+        if (cal.before(Calendar.getInstance())) {
+            Toast.makeText(getActivity(), R.string.date_in_past, Toast.LENGTH_LONG).show();
+        } else {
+            dueDate = cal;
+            dateTextView.setText(CalendarHelper.getDateString(cal));
+        }
     }
 
     //pass the calendar object from time picker back to the fragment
     public void passTime(Calendar cal) {
-        dueTime = cal;
-        timeTextView.setText(CalendarHelper.getTimeString(cal));
+        //ensure time is not in the past
+        if (dueDate == null) {
+            if (cal.before(Calendar.getInstance())) {
+                Toast.makeText(getActivity(), R.string.time_in_past, Toast.LENGTH_LONG).show();
+            } else {
+                dueTime = cal;
+                timeTextView.setText(CalendarHelper.getTimeString(cal));
+            }
+        } else {
+            //if we are setting due time to sometime on the same day
+            if (cal.get(Calendar.DAY_OF_YEAR) == dueDate.get(Calendar.DAY_OF_YEAR)) {
+                if (cal.before(dueDate)) {
+                    Toast.makeText(getActivity(), R.string.time_in_past, Toast.LENGTH_LONG).show();
+                } else {
+                    dueTime = cal;
+                    timeTextView.setText(CalendarHelper.getTimeString(cal));
+                }
+            } else {
+                dueTime = cal;
+                timeTextView.setText(CalendarHelper.getTimeString(cal));
+            }
+        }
     }
 
     public void passPriority(int pri) {
@@ -232,17 +256,8 @@ public class NewTaskFragment extends Fragment implements View.OnClickListener,
         categories = cats;
     }
 
-    public void addNewCategory(String newCat) {
-        if (newCat != null) {
-            mListener.addCategory(newCat);
-            mListener.updateCategoryList();
-            adapter.notifyDataSetChanged();
-            //set spinner to new category
-            spinner.setSelection(0);
-            currentCategory = 0;
-        } else {
-            spinner.setSelection(currentCategory);
-        }
+    public void setSpinnerZero() {
+        spinner.setSelection(0);
     }
 
     //listener callback
@@ -252,7 +267,6 @@ public class NewTaskFragment extends Fragment implements View.OnClickListener,
 
         //get or update category list
         public void updateCategoryList();
-        public void addCategory(String category);
     }
 
 }
